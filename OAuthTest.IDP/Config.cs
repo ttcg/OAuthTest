@@ -1,4 +1,5 @@
-﻿using IdentityServer4;
+﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 using System;
@@ -23,22 +24,37 @@ namespace OAuthTest.IDP
 
                     Claims = new List<Claim>
                     {
-                        new Claim("given_name", "TTC"),
-                        new Claim("family_name", "G"),
-                        new Claim("address", "Penn Way")
+                        new Claim(JwtClaimTypes.GivenName, "TTC"),
+                        new Claim(JwtClaimTypes.FamilyName, "G"),
+                        new Claim(JwtClaimTypes.Address, "Penn Way"),
+                        new Claim(JwtClaimTypes.Role, "Admin")
                     }
                 },
                 new TestUser
                 {
                     SubjectId = "81E045ED-7EA0-4F13-BEE6-88459B3B27AB",
                     Username = "John",
-                    Password = "Smith",
+                    Password = "password",
 
                     Claims = new List<Claim>
                     {
-                        new Claim("given_name", "John"),
-                        new Claim("family_name", "Smith"),
-                        new Claim("address", "Thiri Street")
+                        new Claim(JwtClaimTypes.GivenName, "John"),
+                        new Claim(JwtClaimTypes.FamilyName, "Smith"),
+                        new Claim(JwtClaimTypes.Address, "Thiri Street"),
+                        new Claim(JwtClaimTypes.Role, "NormalUser")
+                    }
+                },                
+                new TestUser
+                {
+                    SubjectId = "C333FA5C-78DC-4A29-BD76-185C2F22F717",
+                    Username = "Alex",
+                    Password = "password",
+
+                    Claims = new List<Claim>
+                    {
+                        new Claim(JwtClaimTypes.GivenName, "Alex"),
+                        new Claim(JwtClaimTypes.FamilyName, "Webb"),
+                        new Claim(JwtClaimTypes.Address, "Claremont Road")
                     }
                 },
             };
@@ -50,7 +66,8 @@ namespace OAuthTest.IDP
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResources.Address()
+                new IdentityResources.Address(),
+                new IdentityResource("roles", "Your role(s)", new List<string> { JwtClaimTypes.Role })
             };
         }
 
@@ -75,7 +92,8 @@ namespace OAuthTest.IDP
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Address
+                        IdentityServerConstants.StandardScopes.Address,
+                        "roles"
                     },
                     ClientSecrets =
                     {

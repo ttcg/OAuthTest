@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +12,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace OAuthTest.Web
 {
@@ -40,21 +43,35 @@ namespace OAuthTest.Web
             {
                 options.DefaultScheme = "Cookies";
                 options.DefaultChallengeScheme = "oidc";
-            }).AddCookie("Cookies")
+            }).AddCookie("Cookies", options =>
+            {
+                options.AccessDeniedPath = "/AccessDenied";
+            })
             .AddOpenIdConnect("oidc", options =>
             {
                 options.SignInScheme = "Cookies";
-                options.Authority = "https://localhost:44378";
+                options.Authority = Constants.IdentityServerProviderUrl;
                 options.ClientId = "oauthtestwebclient";
                 options.ResponseType = "code id_token";
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
                 options.Scope.Add("address");
+                options.Scope.Add("roles");
                 options.SaveTokens = true;
                 options.ClientSecret = "ttcg";
+                options.GetClaimsFromUserInfoEndpoint = true;
+
                 options.ClaimActions.Remove("amr");
-                options.ClaimActions.Remove("sid"); ///TODO not working yet
-                options.ClaimActions.Remove("idp");
+                options.ClaimActions.DeleteClaim("sid");
+                options.ClaimActions.DeleteClaim("idp");
+
+                options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role);
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = JwtClaimTypes.GivenName,
+                    RoleClaimType = JwtClaimTypes.Role
+                };
             });
         }
 
@@ -82,6 +99,11 @@ namespace OAuthTest.Web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                    name: "AccessDenied",
+                    template: "AccessDenied",
+                    defaults: new { controller = "Home", action = "AccessDenied" });
             });
         }
     }

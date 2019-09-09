@@ -10,5 +10,6 @@ namespace OAuthTest.Web.Models
         public string FirstName { get; set; }
         public string Surname { get; set; }
         public string StreetAddress { get; set; }
+        public string Role { get; set; }
     }
 }

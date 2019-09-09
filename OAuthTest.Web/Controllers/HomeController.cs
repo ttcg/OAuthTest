@@ -10,6 +10,8 @@ using OAuthTest.Web.Models;
 using IdentityModel.Client;
 using System.Net.Http;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System.Security.Claims;
+using IdentityModel;
 
 namespace OAuthTest.Web.Controllers
 {
@@ -23,37 +25,55 @@ namespace OAuthTest.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Privacy()
         {
-            var currentIdentity = HttpContext.User;
-            foreach(var claim in currentIdentity.Claims)
             {
-                Debug.WriteLine($"xxxxxxxxxxxxxxxxxxxx Claim - {claim.Type} : {claim.Value} xxxxxxxxxxxxxxxxxxxxxxxx");
+                foreach (var claim in User.Claims)
+                {
+                    Debug.WriteLine($"xxxxxxxxxxxxxxxxxxxx Claim - {claim.Type} : {claim.Value} xxxxxxxxxxxxxxxxxxxxxxxx");
+                }
+
+                UserInfoResponse response = await GetUserInfo();
+
+                var model = new PrivacyViewModel
+                {
+                    FirstName = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.GivenName)?.Value,
+                    Surname = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.FamilyName)?.Value,
+                    StreetAddress = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Address)?.Value,
+                    Role = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role)?.Value
+                };
+
+                return View(model);
             }
 
-            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-
-            var client = new HttpClient();
-
-            client.SetBearerToken(accessToken);
-
-            var disco = await client.GetDiscoveryDocumentAsync("https://localhost:44378/");
-            
-            if (disco.IsError) throw new Exception(disco.Error);
-
-            var response = await client.GetUserInfoAsync(new UserInfoRequest
+            async Task<UserInfoResponse> GetUserInfo()
             {
-                Address = disco.UserInfoEndpoint,
-                Token = accessToken
-            });
-            if (response.IsError) throw new Exception(response.Error);
+                var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
 
-            var model = new PrivacyViewModel
-            {
-                FirstName = response.Claims.FirstOrDefault(x => x.Type == "given_name")?.Value,
-                Surname = response.Claims.FirstOrDefault(x => x.Type == "family_name")?.Value,
-                StreetAddress = response.Claims.FirstOrDefault(x => x.Type == "address")?.Value
-            };
+                var client = new HttpClient();
+                client.SetBearerToken(accessToken);
 
-            return View(model);
+                var disco = await client.GetDiscoveryDocumentAsync(Constants.IdentityServerProviderUrl);
+                if (disco.IsError) throw new Exception(disco.Error);
+
+                var response = await client.GetUserInfoAsync(new UserInfoRequest
+                {
+                    Address = disco.UserInfoEndpoint,
+                    Token = accessToken
+                });
+                if (response.IsError) throw new Exception(response.Error);
+
+                return response;
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminOnly()
+        {
+            return View();
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
         public async Task Logout()

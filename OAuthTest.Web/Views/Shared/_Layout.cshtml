@@ -40,6 +40,12 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
                             </li>
                         }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AdminOnly">Admin Only</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

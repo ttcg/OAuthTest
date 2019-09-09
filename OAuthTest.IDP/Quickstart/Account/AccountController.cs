@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OAuthTest.IDP;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,6 +66,8 @@ namespace IdentityServer4.Quickstart.UI
                 // we only have one option for logging in and it's an external provider
                 return RedirectToAction("Challenge", "External", new { provider = vm.ExternalLoginScheme, returnUrl });
             }
+
+            vm.Username = Config.GetUsers().First().Username;
 
             return View(vm);
         }
