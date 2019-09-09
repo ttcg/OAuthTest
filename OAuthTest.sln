@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.Web", "OAuthTest\OAuthTest.Web.csproj", "{3CF5392C-2FD7-4889-A54B-BC275E740578}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.Web", "OAuthTest.Web\OAuthTest.Web.csproj", "{3CF5392C-2FD7-4889-A54B-BC275E740578}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.IDP", "OAuthTest.IDP\OAuthTest.IDP.csproj", "{38134D21-7D2F-4A09-A3A9-067860DE7623}"
 EndProject

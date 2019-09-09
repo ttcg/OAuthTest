@@ -48,8 +48,8 @@ namespace OAuthTest.Web.Controllers
 
             var model = new PrivacyViewModel
             {
-                FirstName = response.Claims.FirstOrDefault(x => x.Type == "name")?.Value,
-                Surname = response.Claims.FirstOrDefault(x => x.Type == "given_name")?.Value,
+                FirstName = response.Claims.FirstOrDefault(x => x.Type == "given_name")?.Value,
+                Surname = response.Claims.FirstOrDefault(x => x.Type == "family_name")?.Value,
                 StreetAddress = response.Claims.FirstOrDefault(x => x.Type == "address")?.Value
             };
 
