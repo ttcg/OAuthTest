@@ -8,5 +8,6 @@ namespace OAuthTest.Web
     public class Constants
     {
         public const string IdentityServerProviderUrl = "https://localhost:44378/";
+        public const string ApiUrl = "https://localhost:44367/";
     }
 }

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.Web", "OAuthTest.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.IDP", "OAuthTest.IDP\OAuthTest.IDP.csproj", "{38134D21-7D2F-4A09-A3A9-067860DE7623}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthTest.Api", "OAuthTest.Api\OAuthTest.Api.csproj", "{ECAFBB26-CB35-4850-AAC8-39D7A38D5455}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{38134D21-7D2F-4A09-A3A9-067860DE7623}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38134D21-7D2F-4A09-A3A9-067860DE7623}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38134D21-7D2F-4A09-A3A9-067860DE7623}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECAFBB26-CB35-4850-AAC8-39D7A38D5455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECAFBB26-CB35-4850-AAC8-39D7A38D5455}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECAFBB26-CB35-4850-AAC8-39D7A38D5455}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECAFBB26-CB35-4850-AAC8-39D7A38D5455}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

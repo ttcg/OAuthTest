@@ -23,3 +23,9 @@
         <td>@Model.Role</td>
     </tr>
 </table>
+<h2>Values from Api</h2>
+
+@foreach (var item in Model.Values)
+{
+    <p>@item</p>
+}

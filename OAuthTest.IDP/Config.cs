@@ -71,6 +71,14 @@ namespace OAuthTest.IDP
             };
         }
 
+        public static IEnumerable<ApiResource> GetApiResources()
+        {
+            return new List<ApiResource>
+            {   
+                new ApiResource("oauthtestapi", "OAuth Test Api")
+            };
+        }
+
         public static IEnumerable<Client> GetClients()
         {
             return new List<Client>
@@ -93,12 +101,14 @@ namespace OAuthTest.IDP
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
-                        "roles"
-                    },
+                        "roles",
+                        "oauthtestapi"
+                    },                    
                     ClientSecrets =
                     {
                         new Secret("ttcg".Sha256())
-                    }
+                    },
+                    //RequireConsent = false
                 }
             };
         }

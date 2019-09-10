@@ -53,10 +53,13 @@ namespace OAuthTest.Web
                 options.Authority = Constants.IdentityServerProviderUrl;
                 options.ClientId = "oauthtestwebclient";
                 options.ResponseType = "code id_token";
+
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
                 options.Scope.Add("address");
                 options.Scope.Add("roles");
+                options.Scope.Add("oauthtestapi");
+
                 options.SaveTokens = true;
                 options.ClientSecret = "ttcg";
                 options.GetClaimsFromUserInfoEndpoint = true;

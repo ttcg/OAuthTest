@@ -11,5 +11,7 @@ namespace OAuthTest.Web.Models
         public string Surname { get; set; }
         public string StreetAddress { get; set; }
         public string Role { get; set; }
+
+        public List<string> Values { get; set; } = new List<string>();
     }
 }

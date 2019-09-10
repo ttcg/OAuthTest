@@ -12,6 +12,9 @@ using System.Net.Http;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Security.Claims;
 using IdentityModel;
+using System.Net.Mime;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace OAuthTest.Web.Controllers
 {
@@ -23,7 +26,7 @@ namespace OAuthTest.Web.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Privacy()
+        public async Task<IActionResult> Privacy([FromQuery(Name = "secured")] string secured)
         {
             {
                 foreach (var claim in User.Claims)
@@ -33,12 +36,17 @@ namespace OAuthTest.Web.Controllers
 
                 UserInfoResponse response = await GetUserInfo();
 
+                var dataFromApi = await GetDataFromApi(string.IsNullOrWhiteSpace(secured) ? "api/values" : "api/values/secured");
+                if (dataFromApi == null)
+                    return RedirectToAction(nameof(AccessDenied));
+
                 var model = new PrivacyViewModel
                 {
                     FirstName = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.GivenName)?.Value,
                     Surname = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.FamilyName)?.Value,
                     StreetAddress = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Address)?.Value,
-                    Role = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role)?.Value
+                    Role = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role)?.Value,
+                    Values = dataFromApi
                 };
 
                 return View(model);
@@ -62,6 +70,31 @@ namespace OAuthTest.Web.Controllers
                 if (response.IsError) throw new Exception(response.Error);
 
                 return response;
+            }
+
+            async Task<List<string>> GetDataFromApi(string apiRoute)
+            {
+                var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+
+                var client = new HttpClient();
+
+                if (string.IsNullOrWhiteSpace(accessToken) == false)
+                    client.SetBearerToken(accessToken);
+
+                client.BaseAddress = new Uri($"{Constants.ApiUrl}");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
+
+                var response = await client.GetAsync(apiRoute);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+
+                    var model = JsonConvert.DeserializeObject<List<string>>(json);
+
+                    return model;
+                }
+                return null;
             }
         }
 
