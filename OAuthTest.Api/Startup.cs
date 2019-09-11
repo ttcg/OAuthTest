@@ -32,8 +32,8 @@ namespace OAuthTest.Api
                 IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "https://localhost:44378/";
-                    options.ApiName = "oauthtestapi";
+                    options.Authority = Constants.Urls.IdentityServerProviderUrl;
+                    options.ApiName = Constants.Clients.Api;
                 });
         }
 

@@ -36,7 +36,7 @@ namespace OAuthTest.Students.Controllers
 
                 UserInfoResponse response = await GetUserInfo();
 
-                var dataFromApi = await GetDataFromApi(string.IsNullOrWhiteSpace(secured) ? "api/values" : "api/values/secured");
+                var dataFromApi = await GetDataFromApi(string.IsNullOrWhiteSpace(secured) ? "values" : "values/secured");
                 if (dataFromApi == null)
                     return RedirectToAction(nameof(AccessDenied));
 
@@ -59,7 +59,7 @@ namespace OAuthTest.Students.Controllers
                 var client = new HttpClient();
                 client.SetBearerToken(accessToken);
 
-                var disco = await client.GetDiscoveryDocumentAsync(Constants.IdentityServerProviderUrl);
+                var disco = await client.GetDiscoveryDocumentAsync(Constants.Urls.IdentityServerProviderUrl);
                 if (disco.IsError) throw new Exception(disco.Error);
 
                 var response = await client.GetUserInfoAsync(new UserInfoRequest
@@ -81,7 +81,7 @@ namespace OAuthTest.Students.Controllers
                 if (string.IsNullOrWhiteSpace(accessToken) == false)
                     client.SetBearerToken(accessToken);
 
-                client.BaseAddress = new Uri($"{Constants.ApiUrl}");
+                client.BaseAddress = new Uri($"{Constants.Urls.ApiUrl}/api/");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
 

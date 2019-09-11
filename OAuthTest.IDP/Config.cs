@@ -75,7 +75,7 @@ namespace OAuthTest.IDP
         {
             return new List<ApiResource>
             {   
-                new ApiResource("oauthtestapi", "OAuth Test Api")
+                new ApiResource(Constants.Clients.Api, "OAuth Test Api")
             };
         }
 
@@ -86,15 +86,15 @@ namespace OAuthTest.IDP
                 new Client
                 {
                     ClientName = "OAuth Test Web",
-                    ClientId = "oauthtestwebclient",
+                    ClientId = Constants.Clients.Students,
                     AllowedGrantTypes = GrantTypes.Hybrid,
                     RedirectUris = new List<string>
                     {
-                        "https://localhost:44392/signin-oidc"
+                        $"{Constants.Urls.StudentsUrl}/signin-oidc"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "https://localhost:44392/signout-callback-oidc"
+                        $"{Constants.Urls.StudentsUrl}/signout-callback-oidc"
                     },
                     AllowedScopes =
                     {
@@ -102,11 +102,11 @@ namespace OAuthTest.IDP
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
                         "roles",
-                        "oauthtestapi"
+                        Constants.Clients.Api
                     },                    
                     ClientSecrets =
                     {
-                        new Secret("ttcg".Sha256())
+                        new Secret(Constants.Secrets.SharedSecret.Sha256())
                     },
                     //RequireConsent = false
                 }

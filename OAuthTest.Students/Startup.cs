@@ -50,18 +50,18 @@ namespace OAuthTest.Students
             .AddOpenIdConnect("oidc", options =>
             {
                 options.SignInScheme = "Cookies";
-                options.Authority = Constants.IdentityServerProviderUrl;
-                options.ClientId = "oauthtestwebclient";
+                options.Authority = Constants.Urls.IdentityServerProviderUrl;
+                options.ClientId = Constants.Clients.Students;
                 options.ResponseType = "code id_token";
 
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
                 options.Scope.Add("address");
                 options.Scope.Add("roles");
-                options.Scope.Add("oauthtestapi");
+                options.Scope.Add(Constants.Clients.Api);
 
                 options.SaveTokens = true;
-                options.ClientSecret = "ttcg";
+                options.ClientSecret = Constants.Secrets.SharedSecret;
                 options.GetClaimsFromUserInfoEndpoint = true;
 
                 options.ClaimActions.Remove("amr");

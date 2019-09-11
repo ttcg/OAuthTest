@@ -22,7 +22,10 @@ namespace OAuthTest.Api.Controllers
         [Authorize]
         public ActionResult<IEnumerable<string>> SecuredGet()
         {
-            return new string[] { "Secured Text1", "Secured Text2" };
+            if(User.IsInRole("Admin")) 
+                return new string[] { "Text for Admin 1", "Text for Admin 2" };
+            
+            return new string[] { "Text for LoggedIn User 1", "Text for LoggedIn User 2" };
         }
 
         // GET api/values/5
