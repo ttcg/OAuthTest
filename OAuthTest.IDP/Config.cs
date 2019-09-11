@@ -75,7 +75,7 @@ namespace OAuthTest.IDP
         {
             return new List<ApiResource>
             {   
-                new ApiResource(Constants.Clients.Api, "OAuth Test Api")
+                new ApiResource(Constants.Clients.Api, "OAuth Test Api", new List<string> { JwtClaimTypes.Role })
             };
         }
 
