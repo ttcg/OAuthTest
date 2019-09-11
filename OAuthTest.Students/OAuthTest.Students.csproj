@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <AssemblyName>OAuthTest.Web</AssemblyName>
-    <RootNamespace>OAuthTest.Web</RootNamespace>
+    <AssemblyName>OAuthTest.Students</AssemblyName>
+    <RootNamespace>OAuthTest.Students</RootNamespace>
   </PropertyGroup>
 
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OAuthTest.Web.Models;
+using OAuthTest.Students.Models;
 using IdentityModel.Client;
 using System.Net.Http;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -16,7 +16,7 @@ using System.Net.Mime;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 
-namespace OAuthTest.Web.Controllers
+namespace OAuthTest.Students.Controllers
 {
     public class HomeController : Controller
     {

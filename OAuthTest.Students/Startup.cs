@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace OAuthTest.Web
+namespace OAuthTest.Students
 {
     public class Startup
     {

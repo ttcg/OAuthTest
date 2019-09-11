@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OAuthTest.Web.Models
+namespace OAuthTest.Students.Models
 {
     public class PrivacyViewModel
     {

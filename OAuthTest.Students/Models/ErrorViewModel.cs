@@ -1,6 +1,6 @@
 using System;
 
-namespace OAuthTest.Web.Models
+namespace OAuthTest.Students.Models
 {
     public class ErrorViewModel
     {
