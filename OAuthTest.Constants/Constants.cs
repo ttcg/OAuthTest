@@ -22,4 +22,9 @@ namespace OAuthTest.Constants
         public const string Teachers = "oauthtestteachers";
         public const string Api = "oauthtestapi";
     }
+
+    public class CustomClaimTypes
+    {
+        public const string Country = "country";
+    }
 }

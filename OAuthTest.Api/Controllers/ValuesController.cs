@@ -28,6 +28,13 @@ namespace OAuthTest.Api.Controllers
             return new string[] { "Text for LoggedIn User 1", "Text for LoggedIn User 2" };
         }
 
+        [HttpGet("UkOnly")]
+        [Authorize("UKResidenceOnly")]
+        public IActionResult UkOnly()
+        {
+            return new JsonResult("This string is only for UK Residence Only.");
+        }
+
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)

@@ -25,6 +25,16 @@ namespace OAuthTest.Students.Controllers
             return View();
         }
 
+        [Authorize("UKStudentOnly")]
+        public async Task<IActionResult> UKOnly()
+        {
+            var dataFromApi = await GetDataFromApi<string>("values/ukonly");
+            if (dataFromApi == null)
+                return RedirectToAction(nameof(AccessDenied));
+
+            return View(new UkOnlyViewModel { ApiReturnText = dataFromApi });
+        }
+
         [Authorize]
         public async Task<IActionResult> Privacy([FromQuery(Name = "secured")] string secured)
         {
@@ -36,7 +46,7 @@ namespace OAuthTest.Students.Controllers
 
                 UserInfoResponse response = await GetUserInfo();
 
-                var dataFromApi = await GetDataFromApi(string.IsNullOrWhiteSpace(secured) ? "values" : "values/secured");
+                var dataFromApi = await GetDataFromApi<List<string>>(string.IsNullOrWhiteSpace(secured) ? "values" : "values/secured");
                 if (dataFromApi == null)
                     return RedirectToAction(nameof(AccessDenied));
 
@@ -47,7 +57,7 @@ namespace OAuthTest.Students.Controllers
                     StreetAddress = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Address)?.Value,
                     Role = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role)?.Value,
                     Values = dataFromApi
-                };
+                };                
 
                 return View(model);
             }
@@ -72,30 +82,7 @@ namespace OAuthTest.Students.Controllers
                 return response;
             }
 
-            async Task<List<string>> GetDataFromApi(string apiRoute)
-            {
-                var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-
-                var client = new HttpClient();
-
-                if (string.IsNullOrWhiteSpace(accessToken) == false)
-                    client.SetBearerToken(accessToken);
-
-                client.BaseAddress = new Uri($"{Constants.Urls.ApiUrl}/api/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
-
-                var response = await client.GetAsync(apiRoute);
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-
-                    var model = JsonConvert.DeserializeObject<List<string>>(json);
-
-                    return model;
-                }
-                return null;
-            }
+            
         }
 
         [Authorize(Roles = "Admin")]
@@ -119,6 +106,31 @@ namespace OAuthTest.Students.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        async Task<T> GetDataFromApi<T>(string apiRoute)
+        {
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+
+            var client = new HttpClient();
+
+            if (string.IsNullOrWhiteSpace(accessToken) == false)
+                client.SetBearerToken(accessToken);
+
+            client.BaseAddress = new Uri($"{Constants.Urls.ApiUrl}/api/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
+
+            var response = await client.GetAsync(apiRoute);
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+
+                var model = JsonConvert.DeserializeObject<T>(json);
+
+                return model;
+            }
+            return default(T);
         }
     }
 }

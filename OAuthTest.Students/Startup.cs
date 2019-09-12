@@ -38,6 +38,16 @@ namespace OAuthTest.Students
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("UKStudentOnly",
+                    policyBuilder =>
+                    {
+                        policyBuilder.RequireAuthenticatedUser();
+                        policyBuilder.RequireClaim(Constants.CustomClaimTypes.Country, "UK");
+                    });
+            });
            
             services.AddAuthentication(options =>
             {
@@ -58,6 +68,7 @@ namespace OAuthTest.Students
                 options.Scope.Add("profile");
                 options.Scope.Add("address");
                 options.Scope.Add("roles");
+                options.Scope.Add("country");
                 options.Scope.Add(Constants.Clients.Api);
 
                 options.SaveTokens = true;
@@ -69,6 +80,7 @@ namespace OAuthTest.Students
                 options.ClaimActions.DeleteClaim("idp");
 
                 options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role);
+                options.ClaimActions.MapUniqueJsonKey(Constants.CustomClaimTypes.Country, Constants.CustomClaimTypes.Country);
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -95,7 +107,7 @@ namespace OAuthTest.Students
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            app.UseCookiePolicy();            
 
             app.UseMvc(routes =>
             {

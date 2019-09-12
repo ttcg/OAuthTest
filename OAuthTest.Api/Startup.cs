@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using OAuthTest.Api.Authorization;
 
 namespace OAuthTest.Api
 {
@@ -35,6 +37,18 @@ namespace OAuthTest.Api
                     options.Authority = Constants.Urls.IdentityServerProviderUrl;
                     options.ApiName = Constants.Clients.Api;
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("UKResidenceOnly",
+                    policyBuilder =>
+                    {
+                        policyBuilder.RequireAuthenticatedUser();
+                        policyBuilder.AddRequirements(new MustLiveInUkRequirement());
+                    });
+            });
+
+            services.AddScoped<IAuthorizationHandler, MustLiveInUkHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

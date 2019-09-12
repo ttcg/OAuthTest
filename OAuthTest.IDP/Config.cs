@@ -27,7 +27,8 @@ namespace OAuthTest.IDP
                         new Claim(JwtClaimTypes.GivenName, "TTC"),
                         new Claim(JwtClaimTypes.FamilyName, "G"),
                         new Claim(JwtClaimTypes.Address, "Penn Way"),
-                        new Claim(JwtClaimTypes.Role, "Admin")
+                        new Claim(JwtClaimTypes.Role, "Admin"),
+                        new Claim(Constants.CustomClaimTypes.Country, "UK")
                     }
                 },
                 new TestUser
@@ -41,7 +42,8 @@ namespace OAuthTest.IDP
                         new Claim(JwtClaimTypes.GivenName, "John"),
                         new Claim(JwtClaimTypes.FamilyName, "Smith"),
                         new Claim(JwtClaimTypes.Address, "Thiri Street"),
-                        new Claim(JwtClaimTypes.Role, "NormalUser")
+                        new Claim(JwtClaimTypes.Role, "NormalUser"),
+                        new Claim(Constants.CustomClaimTypes.Country, "FR")
                     }
                 },                
                 new TestUser
@@ -54,7 +56,8 @@ namespace OAuthTest.IDP
                     {
                         new Claim(JwtClaimTypes.GivenName, "Alex"),
                         new Claim(JwtClaimTypes.FamilyName, "Webb"),
-                        new Claim(JwtClaimTypes.Address, "Claremont Road")
+                        new Claim(JwtClaimTypes.Address, "Claremont Road"),
+                        new Claim(Constants.CustomClaimTypes.Country, "MM")
                     }
                 },
             };
@@ -67,7 +70,8 @@ namespace OAuthTest.IDP
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Address(),
-                new IdentityResource("roles", "Your role(s)", new List<string> { JwtClaimTypes.Role })
+                new IdentityResource("roles", "Your role(s)", new List<string> { JwtClaimTypes.Role }),
+                new IdentityResource("country", "Your Residence Country", new List<string> { Constants.CustomClaimTypes.Country })
             };
         }
 
@@ -75,7 +79,7 @@ namespace OAuthTest.IDP
         {
             return new List<ApiResource>
             {   
-                new ApiResource(Constants.Clients.Api, "OAuth Test Api", new List<string> { JwtClaimTypes.Role })
+                new ApiResource(Constants.Clients.Api, "OAuth Test Api", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country })
             };
         }
 
@@ -102,6 +106,7 @@ namespace OAuthTest.IDP
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
                         "roles",
+                        "country",
                         Constants.Clients.Api
                     },                    
                     ClientSecrets =
