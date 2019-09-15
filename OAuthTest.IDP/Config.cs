@@ -2,11 +2,8 @@
 using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace OAuthTest.IDP
 {
@@ -45,7 +42,7 @@ namespace OAuthTest.IDP
                         new Claim(JwtClaimTypes.Role, "NormalUser"),
                         new Claim(Constants.CustomClaimTypes.Country, "FR")
                     }
-                },                
+                },
                 new TestUser
                 {
                     SubjectId = "C333FA5C-78DC-4A29-BD76-185C2F22F717",
@@ -116,8 +113,30 @@ namespace OAuthTest.IDP
                     ClientSecrets =
                     {
                         new Secret(Constants.Secrets.SharedSecret.Sha256())
+                    }
+                },
+                new Client
+                {
+                    ClientName = "Postman Test Client",
+                    ClientId = "postman",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    
+                    RequireConsent = false,
+                    RedirectUris = { "https://www.getpostman.com/oauth2/callback" },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Address,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "roles",
+                        "country",
+                        Constants.Clients.Api
                     },
-                    //RequireConsent = false
+                    ClientSecrets =
+                    {
+                        new Secret(Constants.Secrets.SharedSecret.Sha256())
+                    }
                 }
             };
         }
