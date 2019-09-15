@@ -12,8 +12,7 @@ namespace OAuthTest.Constants
 
     public class Secrets
     {
-        public const string SharedSecret = "8ZE7fDu4rcfHWYmK";
-       
+        public const string SharedSecret = "8ZE7fDu4rcfHWYmK";       
     }
 
     public class Clients
@@ -26,5 +25,10 @@ namespace OAuthTest.Constants
     public class CustomClaimTypes
     {
         public const string Country = "country";
+    }
+
+    public class TokenSettings
+    {
+        public const string ExpiresAt = "expires_at";
     }
 }

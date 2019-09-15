@@ -92,6 +92,9 @@ namespace OAuthTest.IDP
                     ClientName = "OAuth Test Web",
                     ClientId = Constants.Clients.Students,
                     AllowedGrantTypes = GrantTypes.Hybrid,
+                    AccessTokenLifetime = 60,
+                    AllowOfflineAccess = true,
+                    UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
                     RedirectUris = new List<string>
                     {
                         $"{Constants.Urls.StudentsUrl}/signin-oidc"
@@ -105,6 +108,7 @@ namespace OAuthTest.IDP
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
                         "roles",
                         "country",
                         Constants.Clients.Api
