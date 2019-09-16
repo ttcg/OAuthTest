@@ -86,11 +86,12 @@ namespace OAuthTest.IDP
             {
                 new Client
                 {
-                    ClientName = "OAuth Test Web",
+                    ClientName = "OAuth Test Students",
                     ClientId = Constants.Clients.Students,
                     AllowedGrantTypes = GrantTypes.Hybrid,
-                    AccessTokenLifetime = 60,
+                    AccessTokenLifetime = 300,
                     AllowOfflineAccess = true,
+                    RequireConsent = false,
                     UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
                     RedirectUris = new List<string>
                     {
@@ -110,6 +111,38 @@ namespace OAuthTest.IDP
                         "country",
                         Constants.Clients.Api
                     },                    
+                    ClientSecrets =
+                    {
+                        new Secret(Constants.Secrets.SharedSecret.Sha256())
+                    }
+                },
+                new Client
+                {
+                    ClientName = "OAuth Test Teachers",
+                    ClientId = Constants.Clients.Teachers,
+                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    AccessTokenLifetime = 300,
+                    AllowOfflineAccess = true,
+                    RequireConsent = false,
+                    UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
+                    RedirectUris = new List<string>
+                    {
+                        $"{Constants.Urls.TeachersUrl}/signin-oidc"
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        $"{Constants.Urls.TeachersUrl}/signout-callback-oidc"
+                    },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Address,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "roles",
+                        "country",
+                        Constants.Clients.Api
+                    },
                     ClientSecrets =
                     {
                         new Secret(Constants.Secrets.SharedSecret.Sha256())

@@ -1,0 +1,31 @@
+﻿@model OAuthTest.Teachers.Models.PrivacyViewModel
+@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to detail your site's privacy policy.</p>
+<table>
+    <tr>
+        <td>First Name</td>
+        <td>@Model.FirstName</td>
+    </tr>
+    <tr>
+        <td>Surname</td>
+        <td>@Model.Surname</td>
+    </tr>
+    <tr>
+        <td>Address</td>
+        <td>@Model.StreetAddress</td>
+    </tr>
+    <tr>
+        <td>Role</td>
+        <td>@Model.Role</td>
+    </tr>
+</table>
+<h2>Values from Api</h2>
+
+@foreach (var item in Model.Values)
+{
+    <p>@item</p>
+}

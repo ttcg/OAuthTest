@@ -1,15 +1,20 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Threading.Tasks;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace OAuthTest.Students
+namespace OAuthTest.Teachers
 {
     public class Startup
     {
@@ -34,16 +39,16 @@ namespace OAuthTest.Students
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("UKStudentOnly",
-                    policyBuilder =>
-                    {
-                        policyBuilder.RequireAuthenticatedUser();
-                        policyBuilder.RequireClaim(Constants.CustomClaimTypes.Country, "UK");
-                    });
-            });
-           
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("UKStudentOnly",
+            //        policyBuilder =>
+            //        {
+            //            policyBuilder.RequireAuthenticatedUser();
+            //            policyBuilder.RequireClaim(Constants.CustomClaimTypes.Country, "UK");
+            //        });
+            //});
+
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";
@@ -56,7 +61,7 @@ namespace OAuthTest.Students
             {
                 options.SignInScheme = "Cookies";
                 options.Authority = Constants.Urls.IdentityServerProviderUrl;
-                options.ClientId = Constants.Clients.Students;
+                options.ClientId = Constants.Clients.Teachers;
                 options.ResponseType = "code id_token";
 
                 options.Scope.Add("openid");
@@ -77,6 +82,7 @@ namespace OAuthTest.Students
 
                 options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role);
                 options.ClaimActions.MapUniqueJsonKey(Constants.CustomClaimTypes.Country, Constants.CustomClaimTypes.Country);
+                options.ClaimActions.MapUniqueJsonKey("address", "address");
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -103,7 +109,7 @@ namespace OAuthTest.Students
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();            
+            app.UseCookiePolicy();
 
             app.UseMvc(routes =>
             {
@@ -114,7 +120,7 @@ namespace OAuthTest.Students
 
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");                
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

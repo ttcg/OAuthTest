@@ -7,7 +7,7 @@ namespace OAuthTest.Constants
         public const string IdentityServerProviderUrl = "https://localhost:44378";
         public const string ApiUrl = "https://localhost:44367";
         public const string StudentsUrl = "https://localhost:44392";
-        public const string TeachersUrl = "https://localhost:44392";
+        public const string TeachersUrl = "https://localhost:44344";
     }
 
     public class Secrets
