@@ -39,16 +39,6 @@ namespace OAuthTest.Teachers
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("UKStudentOnly",
-            //        policyBuilder =>
-            //        {
-            //            policyBuilder.RequireAuthenticatedUser();
-            //            policyBuilder.RequireClaim(Constants.CustomClaimTypes.Country, "UK");
-            //        });
-            //});
-
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";
@@ -83,6 +73,8 @@ namespace OAuthTest.Teachers
                 options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role);
                 options.ClaimActions.MapUniqueJsonKey(Constants.CustomClaimTypes.Country, Constants.CustomClaimTypes.Country);
                 options.ClaimActions.MapUniqueJsonKey("address", "address");
+
+                options.SignedOutRedirectUri = Constants.Urls.StudentsUrl;
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
