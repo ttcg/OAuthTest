@@ -76,7 +76,7 @@ namespace OAuthTest.IDP
         {
             return new List<ApiResource>
             {   
-                new ApiResource(Constants.Clients.Api, "OAuth Test Api", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country })
+                new ApiResource(Constants.Clients.ApiStudents, "OAuth Test Api Students", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country })
             };
         }
 
@@ -109,7 +109,7 @@ namespace OAuthTest.IDP
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "roles",
                         "country",
-                        Constants.Clients.Api
+                        Constants.Clients.ApiStudents
                     },                    
                     ClientSecrets =
                     {
@@ -141,7 +141,7 @@ namespace OAuthTest.IDP
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "roles",
                         "country",
-                        Constants.Clients.Api
+                        Constants.Clients.ApiStudents
                     },
                     ClientSecrets =
                     {
@@ -164,7 +164,7 @@ namespace OAuthTest.IDP
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "roles",
                         "country",
-                        Constants.Clients.Api
+                        Constants.Clients.ApiStudents
                     },
                     ClientSecrets =
                     {

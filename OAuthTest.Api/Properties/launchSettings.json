@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "OAuthTest.Api": {
+    "OAuthTest.ApiStudents": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",

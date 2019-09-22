@@ -79,7 +79,7 @@ namespace OAuthTest.Teachers.Controllers
             if (string.IsNullOrWhiteSpace(accessToken) == false)
                 client.SetBearerToken(accessToken);
 
-            client.BaseAddress = new Uri($"{Constants.Urls.ApiUrl}/api/");
+            client.BaseAddress = new Uri($"{Constants.Urls.ApiStudentsUrl}/api/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
 

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace OAuthTest.Api.Controllers
+namespace OAuthTest.ApiStudents.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -15,7 +12,7 @@ namespace OAuthTest.Api.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "students1", "students2" };
         }
 
         [HttpGet("Secured")]
@@ -32,7 +29,7 @@ namespace OAuthTest.Api.Controllers
         [Authorize("UKResidenceOnly")]
         public IActionResult UkOnly()
         {
-            return new JsonResult("This string is only for UK Residence Only.");
+            return new JsonResult("This string is only for UK Residence Students Only.");
         }
 
         // GET api/values/5

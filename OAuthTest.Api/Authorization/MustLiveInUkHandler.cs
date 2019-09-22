@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OAuthTest.Api.Authorization
+namespace OAuthTest.ApiStudents.Authorization
 {
 
     public class MustLiveInUkHandler : AuthorizationHandler<MustLiveInUkRequirement>

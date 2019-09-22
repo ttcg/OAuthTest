@@ -5,7 +5,7 @@ namespace OAuthTest.Constants
     public class Urls
     {
         public const string IdentityServerProviderUrl = "https://localhost:44378";
-        public const string ApiUrl = "https://localhost:44367";
+        public const string ApiStudentsUrl = "https://localhost:44367";
         public const string StudentsUrl = "https://localhost:44392";
         public const string TeachersUrl = "https://localhost:44344";
     }
@@ -19,7 +19,7 @@ namespace OAuthTest.Constants
     {
         public const string Students = "oauthteststudents";
         public const string Teachers = "oauthtestteachers";
-        public const string Api = "oauthtestapi";
+        public const string ApiStudents = "oauthtestapistudents";
     }
 
     public class CustomClaimTypes

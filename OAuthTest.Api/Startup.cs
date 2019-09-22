@@ -12,9 +12,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using OAuthTest.Api.Authorization;
+using OAuthTest.ApiStudents.Authorization;
 
-namespace OAuthTest.Api
+namespace OAuthTest.ApiStudents
 {
     public class Startup
     {
@@ -35,7 +35,7 @@ namespace OAuthTest.Api
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = Constants.Urls.IdentityServerProviderUrl;
-                    options.ApiName = Constants.Clients.Api;
+                    options.ApiName = Constants.Clients.ApiStudents;
                 });
 
             services.AddAuthorization(options =>

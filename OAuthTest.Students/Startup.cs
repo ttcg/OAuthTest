@@ -65,7 +65,7 @@ namespace OAuthTest.Students
                 options.Scope.Add("roles");
                 options.Scope.Add("country");
                 options.Scope.Add("offline_access");
-                options.Scope.Add(Constants.Clients.Api);
+                options.Scope.Add(Constants.Clients.ApiStudents);
 
                 options.SaveTokens = true;
                 options.ClientSecret = Constants.Secrets.SharedSecret;
