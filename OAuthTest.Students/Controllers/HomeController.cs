@@ -37,7 +37,7 @@ namespace OAuthTest.Students.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Privacy([FromQuery(Name = "secured")] string secured)
+        public async Task<IActionResult> Secured([FromQuery(Name = "securedApi")] string securedApi)
         {
             {
                 foreach (var claim in User.Claims)
@@ -57,7 +57,7 @@ namespace OAuthTest.Students.Controllers
                     return RedirectToAction(nameof(AccessDenied));
                 }
 
-                var dataFromApi = await GetDataFromApi<List<string>>(string.IsNullOrWhiteSpace(secured) ? "values" : "values/secured", accessToken);
+                var dataFromApi = await GetDataFromApi<List<string>>(string.IsNullOrWhiteSpace(securedApi) ? "values" : "values/secured", accessToken);
                 if (dataFromApi == null)
                     return RedirectToAction(nameof(AccessDenied));
 
