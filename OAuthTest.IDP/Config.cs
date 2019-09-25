@@ -75,16 +75,25 @@ namespace OAuthTest.IDP
         public static IEnumerable<ApiResource> GetApiResources()
         {
             return new List<ApiResource>
-            {   
+            {
                 new ApiResource(Constants.Clients.ApiStudents, "OAuth Test Api Students", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country })
             };
         }
 
         public static IEnumerable<Client> GetClients()
         {
-            return new List<Client>
             {
-                new Client
+                return new List<Client>
+                {
+                    CreateStudentsClient(),
+                    CreateTeachersClient(),
+                    CreatePostmanClient()
+                };
+            }
+
+            Client CreateStudentsClient()
+            {
+                return new Client
                 {
                     ClientName = "OAuth Test Students",
                     ClientId = Constants.Clients.Students,
@@ -94,29 +103,24 @@ namespace OAuthTest.IDP
                     RequireConsent = false,
                     UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
                     RedirectUris = new List<string>
-                    {
-                        $"{Constants.Urls.StudentsUrl}/signin-oidc"
-                    },
+                        {
+                            $"{Constants.Urls.StudentsUrl}/signin-oidc"
+                        },
                     PostLogoutRedirectUris = new List<string>
-                    {
-                        $"{Constants.Urls.StudentsUrl}/signout-callback-oidc"
-                    },
-                    AllowedScopes =
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Address,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "roles",
-                        "country",
-                        Constants.Clients.ApiStudents
-                    },                    
+                        {
+                            $"{Constants.Urls.StudentsUrl}/signout-callback-oidc"
+                        },
+                    AllowedScopes = PopulateScopes(),
                     ClientSecrets =
-                    {
-                        new Secret(Constants.Secrets.SharedSecret.Sha256())
-                    }
-                },
-                new Client
+                        {
+                            new Secret(Constants.Secrets.SharedSecret.Sha256())
+                        }
+                };
+            }
+
+            Client CreateTeachersClient()
+            {
+                return new Client
                 {
                     ClientName = "OAuth Test Teachers",
                     ClientId = Constants.Clients.Teachers,
@@ -126,54 +130,50 @@ namespace OAuthTest.IDP
                     RequireConsent = false,
                     UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
                     RedirectUris = new List<string>
-                    {
-                        $"{Constants.Urls.TeachersUrl}/signin-oidc"
-                    },
+                        {
+                            $"{Constants.Urls.TeachersUrl}/signin-oidc"
+                        },
                     PostLogoutRedirectUris = new List<string>
-                    {
-                        $"{Constants.Urls.TeachersUrl}/signout-callback-oidc"
-                    },
-                    AllowedScopes =
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Address,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "roles",
-                        "country",
-                        Constants.Clients.ApiStudents
-                    },
+                        {
+                            $"{Constants.Urls.TeachersUrl}/signout-callback-oidc"
+                        },
+                    AllowedScopes = PopulateScopes(),
                     ClientSecrets =
-                    {
-                        new Secret(Constants.Secrets.SharedSecret.Sha256())
-                    }
-                },
-                new Client
+                        {
+                            new Secret(Constants.Secrets.SharedSecret.Sha256())
+                        }
+                };
+            }
+
+            Client CreatePostmanClient()
+            {
+                return new Client
                 {
                     ClientName = "Postman Test Client",
                     ClientId = "postman",
                     AllowedGrantTypes = GrantTypes.Code,
-                    
+
                     RequireConsent = false,
                     RedirectUris = { "https://www.getpostman.com/oauth2/callback" },
-                    AllowedScopes =
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Address,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "roles",
-                        "country",
-                        Constants.Clients.ApiStudents
-                    },
+                    AllowedScopes = PopulateScopes(),
                     ClientSecrets =
-                    {
-                        new Secret(Constants.Secrets.SharedSecret.Sha256())
-                    }
-                }
-            };
+                        {
+                            new Secret(Constants.Secrets.SharedSecret.Sha256())
+                        }
+                };
+            }
+
+            ICollection<string> PopulateScopes() =>
+                new List<string>
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                            IdentityServerConstants.StandardScopes.Profile,
+                            IdentityServerConstants.StandardScopes.Address,
+                            IdentityServerConstants.StandardScopes.OfflineAccess,
+                            "roles",
+                            "country",
+                            Constants.Clients.ApiStudents
+                };
         }
     }
-
-    
 }
