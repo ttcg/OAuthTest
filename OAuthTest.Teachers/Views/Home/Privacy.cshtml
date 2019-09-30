@@ -4,7 +4,6 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
 <table>
     <tr>
         <td>First Name</td>
@@ -23,9 +22,17 @@
         <td>@Model.Role</td>
     </tr>
 </table>
-<h2>Values from Api</h2>
 
-@foreach (var item in Model.Values)
+<h2>Teachers List</h2>
+
+@foreach (var item in Model.Teachers)
+{
+    <p>@item</p>
+}
+
+<h2>Students List</h2>
+
+@foreach (var item in Model.Students)
 {
     <p>@item</p>
 }

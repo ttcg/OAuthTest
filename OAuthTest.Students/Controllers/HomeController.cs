@@ -29,7 +29,7 @@ namespace OAuthTest.Students.Controllers
         [Authorize("UKStudentOnly")]
         public async Task<IActionResult> UKOnly()
         {
-            var dataFromApi = await GetDataFromApi<string>("values/ukonly", await GetAccessTokenFromContext());
+            var dataFromApi = await GetDataFromApi<string>("students/ukonly", await GetAccessTokenFromContext());
             if (dataFromApi == null)
                 return RedirectToAction(nameof(AccessDenied));
 
@@ -37,7 +37,7 @@ namespace OAuthTest.Students.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Secured([FromQuery(Name = "securedApi")] string securedApi)
+        public async Task<IActionResult> Secured([FromQuery(Name = "secured")] string securedApi)
         {
             {
                 foreach (var claim in User.Claims)
@@ -57,7 +57,7 @@ namespace OAuthTest.Students.Controllers
                     return RedirectToAction(nameof(AccessDenied));
                 }
 
-                var dataFromApi = await GetDataFromApi<List<string>>(string.IsNullOrWhiteSpace(securedApi) ? "values" : "values/secured", accessToken);
+                var dataFromApi = await GetDataFromApi<List<string>>(string.IsNullOrWhiteSpace(securedApi) ? "students" : "students/secured", accessToken);
                 if (dataFromApi == null)
                     return RedirectToAction(nameof(AccessDenied));
 

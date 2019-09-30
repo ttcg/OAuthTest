@@ -12,6 +12,8 @@ namespace OAuthTest.Teachers.Models
         public string StreetAddress { get; set; }
         public string Role { get; set; }
 
-        public List<string> Values { get; set; } = new List<string>();
+        public List<string> Students { get; set; } = new List<string>();
+
+        public List<string> Teachers { get; set; } = new List<string>();
     }
 }

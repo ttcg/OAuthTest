@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
+using OAuthTest.Constants;
 using OAuthTest.Teachers.Models;
 
 namespace OAuthTest.Teachers.Controllers
@@ -38,8 +39,11 @@ namespace OAuthTest.Teachers.Controllers
 
                 var accessToken = await GetAccessTokenFromContext();
 
-                var dataFromApi = await GetDataFromApi<List<string>>(string.IsNullOrWhiteSpace(secured) ? "values" : "values/secured", accessToken);
-                if (dataFromApi == null)
+                var studentsList = await GetDataFromApi<List<string>>(ApiTypes.Student, string.IsNullOrWhiteSpace(secured) ? "students" : "students/secured", accessToken);
+
+                var teachersList = await GetDataFromApi<List<string>>(ApiTypes.Teacher, string.IsNullOrWhiteSpace(secured) ? "teachers" : "teachers/secured", accessToken);
+
+                if (studentsList == null || teachersList == null)
                     return RedirectToAction(nameof(AccessDenied));
 
                 var model = new PrivacyViewModel
@@ -48,7 +52,8 @@ namespace OAuthTest.Teachers.Controllers
                     Surname = User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.FamilyName)?.Value,
                     StreetAddress = User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Address)?.Value,
                     Role = User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role)?.Value,
-                    Values = dataFromApi
+                    Students = studentsList,
+                    Teachers = teachersList
                 };
 
                 return View(model);
@@ -72,27 +77,31 @@ namespace OAuthTest.Teachers.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        async Task<T> GetDataFromApi<T>(string apiRoute, string accessToken)
+        async Task<T> GetDataFromApi<T>(ApiTypes apiType, string apiRoute, string accessToken)
         {
-            var client = new HttpClient();
-
-            if (string.IsNullOrWhiteSpace(accessToken) == false)
-                client.SetBearerToken(accessToken);
-
-            client.BaseAddress = new Uri($"{Constants.Urls.ApiStudentsUrl}/api/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
-
-            var response = await client.GetAsync(apiRoute);
-            if (response.IsSuccessStatusCode)
             {
-                var json = await response.Content.ReadAsStringAsync();
+                var client = new HttpClient();
 
-                var model = JsonConvert.DeserializeObject<T>(json);
+                if (string.IsNullOrWhiteSpace(accessToken) == false)
+                    client.SetBearerToken(accessToken);
 
-                return model;
+                client.BaseAddress = new Uri($"{GetApiBaseAddress()}/api/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
+                
+                var response = await client.GetAsync(apiRoute);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+
+                    var model = JsonConvert.DeserializeObject<T>(json);
+
+                    return model;
+                }
+                return default(T);
             }
-            return default(T);
+
+            string GetApiBaseAddress () => apiType == ApiTypes.Student ? Urls.ApiStudentsUrl : Urls.ApiTeachersUrl;
         }
 
         async Task<string> RenewTokens()
@@ -183,5 +192,5 @@ namespace OAuthTest.Teachers.Controllers
 
             return disco;
         }
-    }
+    }    
 }

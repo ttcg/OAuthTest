@@ -47,13 +47,16 @@
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="https://localhost:44367/api/values">Api</a>
+                            <a class="nav-link text-dark" href="@OAuthTest.Constants.Urls.ApiStudentsUrl/api/students">StudentsApi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="@OAuthTest.Constants.Urls.ApiTeachersUrl/api/teachers">TeachersApi</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="UKOnly">UK Only</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="https://localhost:44344" style="color: blue !important">Teachers</a>
+                            <a class="nav-link text-dark" href="@OAuthTest.Constants.Urls.TeachersUrl" style="color: blue !important">Teachers</a>
                         </li>
                     </ul>
                 </div>

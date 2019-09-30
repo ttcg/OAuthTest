@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.Constants", "OAut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.Teachers", "OAuthTest.Teachers\OAuthTest.Teachers.csproj", "{7DAEAE64-0D59-4B80-9565-F1B766C32F08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthTest.ApiTeachers", "OAuthTest.ApiTeachers\OAuthTest.ApiTeachers.csproj", "{7D19CD69-68BB-47A3-8DFD-8E93ACF20843}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{7DAEAE64-0D59-4B80-9565-F1B766C32F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DAEAE64-0D59-4B80-9565-F1B766C32F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DAEAE64-0D59-4B80-9565-F1B766C32F08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D19CD69-68BB-47A3-8DFD-8E93ACF20843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D19CD69-68BB-47A3-8DFD-8E93ACF20843}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D19CD69-68BB-47A3-8DFD-8E93ACF20843}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D19CD69-68BB-47A3-8DFD-8E93ACF20843}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
