@@ -16,6 +16,7 @@ using System.Net.Mime;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Globalization;
+using OAuthTest.Constants;
 
 namespace OAuthTest.Students.Controllers
 {
@@ -29,7 +30,7 @@ namespace OAuthTest.Students.Controllers
         [Authorize("UKStudentOnly")]
         public async Task<IActionResult> UKOnly()
         {
-            var dataFromApi = await GetDataFromApi<string>("students/ukonly", await GetAccessTokenFromContext());
+            var dataFromApi = await GetDataFromApi<string>(ApiTypes.Student, "students/ukonly", await GetAccessTokenFromContext());
             if (dataFromApi == null)
                 return RedirectToAction(nameof(AccessDenied));
 
@@ -57,9 +58,9 @@ namespace OAuthTest.Students.Controllers
                     return RedirectToAction(nameof(AccessDenied));
                 }
 
-                var dataFromApi = await GetDataFromApi<List<string>>(string.IsNullOrWhiteSpace(securedApi) ? "students" : "students/secured", accessToken);
-                if (dataFromApi == null)
-                    return RedirectToAction(nameof(AccessDenied));
+                var studentsList = await GetDataFromApi<List<string>>(ApiTypes.Student, string.IsNullOrWhiteSpace(securedApi) ? "students" : "students/secured", accessToken);
+                if (studentsList == null)
+                    return RedirectToAction(nameof(AccessDenied));                
 
                 var model = new PrivacyViewModel
                 {
@@ -67,7 +68,7 @@ namespace OAuthTest.Students.Controllers
                     Surname = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.FamilyName)?.Value,
                     StreetAddress = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Address)?.Value,
                     Role = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role)?.Value,
-                    Values = dataFromApi
+                    Values = studentsList
                 };
 
                 return View(model);
@@ -114,27 +115,31 @@ namespace OAuthTest.Students.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        async Task<T> GetDataFromApi<T>(string apiRoute, string accessToken)
+        async Task<T> GetDataFromApi<T>(ApiTypes apiType, string apiRoute, string accessToken)
         {
-            var client = new HttpClient();
-
-            if (string.IsNullOrWhiteSpace(accessToken) == false)
-                client.SetBearerToken(accessToken);
-
-            client.BaseAddress = new Uri($"{Constants.Urls.ApiStudentsUrl}/api/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
-
-            var response = await client.GetAsync(apiRoute);
-            if (response.IsSuccessStatusCode)
             {
-                var json = await response.Content.ReadAsStringAsync();
+                var client = new HttpClient();
 
-                var model = JsonConvert.DeserializeObject<T>(json);
+                if (string.IsNullOrWhiteSpace(accessToken) == false)
+                    client.SetBearerToken(accessToken);
 
-                return model;
+                client.BaseAddress = new Uri($"{GetApiBaseAddress()}/api/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
+
+                var response = await client.GetAsync(apiRoute);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+
+                    var model = JsonConvert.DeserializeObject<T>(json);
+
+                    return model;
+                }
+                return default(T);
             }
-            return default(T);
+
+            string GetApiBaseAddress() => apiType == ApiTypes.Student ? Urls.ApiStudentsUrl : Urls.ApiTeachersUrl;
         }
 
         async Task<string> RenewTokens()

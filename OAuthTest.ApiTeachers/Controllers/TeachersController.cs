@@ -11,37 +11,32 @@ namespace OAuthTest.ApiTeachers.Controllers
     [ApiController]
     public class TeachersController : ControllerBase
     {
-        // GET api/values
+        // GET api/teachers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
             return new string[] { "teachers1", "teachers2" };
         }
 
-        // GET api/values/5
-        [HttpGet("Secured")]
+        // GET api/secured
+        [HttpGet("secured")]
         [Authorize]
         public ActionResult<IEnumerable<string>> Secured()
         {
             return new string[] { "Secured Text Teacher Api 1", "Secured Text Teacher Api 2" };
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
+        // GET api/teachers/5/students
+        [HttpGet("{id}")]
+        [Authorize]
+        public ActionResult<string> GetById(int id)
         {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var teachers = new Dictionary<int, string>
+            {
+                { 123, "teacher name Jon from teachersApi" },
+                { 456, "teacher name Rooney from teachersApi" }
+            };
+            return teachers[id];
         }
     }
 }
