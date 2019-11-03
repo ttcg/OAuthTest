@@ -28,36 +28,29 @@ namespace OAuthTest.Teachers.Controllers
             return View();
         }
 
-        
-        public async Task<IActionResult> Privacy([FromQuery(Name = "secured")] string secured)
+        public async Task<IActionResult> Teachers()
         {
+            var accessToken = await GetAccessTokenFromContext();
+
+            var studentsList = await GetDataFromApi<List<string>>(ApiTypes.Student, "students/secured", accessToken);
+
+            List<Teacher> teachersList = await GetDataFromApi<List<Teacher>>(ApiTypes.Teacher, "teachers/secured", accessToken);
+
+            if (studentsList == null || teachersList == null)
+                return RedirectToAction(nameof(AccessDenied));
+
+            var model = new TeachersViewModel
             {                
-                foreach (var claim in User.Claims)
+                Students = studentsList,
+                Teachers = teachersList.Select(x => new TeachersViewModel.Teacher
                 {
-                    Debug.WriteLine($"xxxxxxxxxxxxxxxxxxxx Claim - {claim.Type} : {claim.Value} xxxxxxxxxxxxxxxxxxxxxxxx");
-                }
+                    Id = x.Id,
+                    Forename = x.Forename,
+                    Surname = x.Surname
+                }).ToList()
+            };
 
-                var accessToken = await GetAccessTokenFromContext();
-
-                var studentsList = await GetDataFromApi<List<string>>(ApiTypes.Student, string.IsNullOrWhiteSpace(secured) ? "students" : "students/secured", accessToken);
-
-                var teachersList = await GetDataFromApi<List<string>>(ApiTypes.Teacher, string.IsNullOrWhiteSpace(secured) ? "teachers" : "teachers/secured", accessToken);
-
-                if (studentsList == null || teachersList == null)
-                    return RedirectToAction(nameof(AccessDenied));
-
-                var model = new PrivacyViewModel
-                {
-                    FirstName = User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.GivenName)?.Value,
-                    Surname = User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.FamilyName)?.Value,
-                    StreetAddress = User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Address)?.Value,
-                    Role = User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role)?.Value,
-                    Students = studentsList,
-                    Teachers = teachersList
-                };
-
-                return View(model);
-            }
+            return View(model);
         }
 
         public IActionResult AccessDenied()
@@ -88,7 +81,7 @@ namespace OAuthTest.Teachers.Controllers
                 client.BaseAddress = new Uri($"{GetApiBaseAddress()}/api/");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
-                
+
                 var response = await client.GetAsync(apiRoute);
                 if (response.IsSuccessStatusCode)
                 {
@@ -101,7 +94,7 @@ namespace OAuthTest.Teachers.Controllers
                 return default(T);
             }
 
-            string GetApiBaseAddress () => apiType == ApiTypes.Student ? Urls.ApiStudentsUrl : Urls.ApiTeachersUrl;
+            string GetApiBaseAddress() => apiType == ApiTypes.Student ? Urls.ApiStudentsUrl : Urls.ApiTeachersUrl;
         }
 
         async Task<string> RenewTokens()
@@ -192,5 +185,13 @@ namespace OAuthTest.Teachers.Controllers
 
             return disco;
         }
-    }    
+    }
+
+    public class Teacher
+    {
+        public Guid Id { get; set; }
+        public string Forename { get; set; }
+        public string Surname { get; set; }
+        public List<Guid> Students { get; set; } = new List<Guid>();
+    }
 }

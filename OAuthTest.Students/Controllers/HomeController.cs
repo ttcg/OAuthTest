@@ -38,14 +38,22 @@ namespace OAuthTest.Students.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Secured([FromQuery(Name = "secured")] string securedApi)
+        public IActionResult Test()
         {
             {
                 foreach (var claim in User.Claims)
                 {
                     Debug.WriteLine($"xxxxxxxxxxxxxxxxxxxx Claim - {claim.Type} : {claim.Value} xxxxxxxxxxxxxxxxxxxxxxxx");
                 }
-                
+
+                return Ok("Test successful");
+            }
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Students([FromQuery(Name = "secured")] string securedApi)
+        {
+            {
                 var accessToken = await GetAccessTokenFromContext();
 
                 UserInfoResponse response;
@@ -58,17 +66,17 @@ namespace OAuthTest.Students.Controllers
                     return RedirectToAction(nameof(AccessDenied));
                 }
 
-                var studentsList = await GetDataFromApi<List<string>>(ApiTypes.Student, string.IsNullOrWhiteSpace(securedApi) ? "students" : "students/secured", accessToken);
+                var studentsList = await GetDataFromApi<List<string>>(ApiTypes.Student, "students", accessToken);
                 if (studentsList == null)
-                    return RedirectToAction(nameof(AccessDenied));                
+                    return RedirectToAction(nameof(AccessDenied));
 
-                var model = new PrivacyViewModel
+                var model = new StudentsViewModel
                 {
                     FirstName = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.GivenName)?.Value,
                     Surname = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.FamilyName)?.Value,
                     StreetAddress = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Address)?.Value,
                     Role = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role)?.Value,
-                    Values = studentsList
+                    Students = studentsList
                 };
 
                 return View(model);
@@ -90,6 +98,32 @@ namespace OAuthTest.Students.Controllers
 
                 return response;
             }
+        }
+
+        [Authorize]
+        public async Task<IActionResult> AdminStudents()
+        {
+                var accessToken = await GetAccessTokenFromContext();
+                
+
+                var studentsList = await GetDataFromApi<List<Student>>(ApiTypes.Student, "students/secured", accessToken);
+                if (studentsList == null)
+                    return RedirectToAction(nameof(AccessDenied));
+
+                var model = new AdminStudentsViewModel
+                {
+                    Students = studentsList.Select(x => new AdminStudentsViewModel.Student
+                    {
+                        Id = x.Id,
+                        Forename = x.Forename,
+                        Surname = x.Surname,
+                        ClassTeacherId = x.ClassTeacherId,
+                        DateOfBirth = x.DateOfBirth,
+                        TeacherName = "TBA"
+                    }).ToList()
+                };
+
+                return View(model);
         }
 
         [Authorize(Roles = "Admin")]
@@ -230,5 +264,14 @@ namespace OAuthTest.Students.Controllers
 
             return disco;
         }
+    }
+
+    public class Student
+    {
+        public Guid Id { get; set; }
+        public string Forename { get; set; }
+        public string Surname { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public Guid ClassTeacherId { get; set; }
     }
 }

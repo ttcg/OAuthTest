@@ -1,9 +1,16 @@
-﻿@model OAuthTest.Teachers.Models.PrivacyViewModel
+﻿@model OAuthTest.Students.Models.StudentsViewModel
 @{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Students List";
 }
 <h1>@ViewData["Title"]</h1>
+@foreach (var item in Model.Students)
+{
+    <p>@item</p>
+}
 
+<a class="nav-link" asp-area="" asp-controller="Home" asp-action="AdminStudents">Admin View</a>
+
+<h2>Current Logged In User</h2>
 <table>
     <tr>
         <td>First Name</td>
@@ -22,17 +29,3 @@
         <td>@Model.Role</td>
     </tr>
 </table>
-
-<h2>Teachers List</h2>
-
-@foreach (var item in Model.Teachers)
-{
-    <p>@item</p>
-}
-
-<h2>Students List</h2>
-
-@foreach (var item in Model.Students)
-{
-    <p>@item</p>
-}
