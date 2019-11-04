@@ -35,6 +35,17 @@ namespace OAuthTest.ApiStudents.Controllers
             return TestData.Students;
         }
 
+        [HttpGet("{id}")]
+        [Authorize]
+        public IActionResult GetStudentById(Guid id)
+        {
+            var student = TestData.Students.SingleOrDefault(x => x.Id == id);
+            if (student == null)
+                return NotFound();
+
+            return Ok(student);
+        }
+
         [HttpGet("UkOnly")]
         [Authorize("UKResidenceOnly")]
         public IActionResult UkOnly()

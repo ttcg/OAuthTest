@@ -48,25 +48,39 @@ namespace OAuthTest.ApiTeachers.Controllers
             {
                 Id = Guid.Parse("ef1670f9-cf98-4738-b3ef-5ba176ce1549"),
                 Forename = "Wendy",
-                Surname = "Taylor"
+                Surname = "Taylor",
+                Students = new List<Guid>{
+                    Guid.Parse("f1e5f27b-8fbc-4baf-b769-f82c25ed551e"),
+                    Guid.Parse("d3ddbb4f-314d-4cf7-8e5e-3f520101b411")
+                }
             },
             new Teacher
             {
                 Id = Guid.Parse("4a0f81ab-982c-4c04-ac3f-d420d0a6641d"),
                 Forename = "Thomas",
-                Surname = "McAlroy"
+                Surname = "McAlroy",
+                Students = new List<Guid>{
+                    Guid.Parse("5ad4179e-cd23-463a-8730-6d699a6ee462")
+                }
             },
             new Teacher
             {
                 Id = Guid.Parse("629f31f3-ad99-4d0d-ad77-a614dad93df1"),
                 Forename = "Bob",
-                Surname = "Dylan"
+                Surname = "Dylan",
+                Students = new List<Guid>{
+                    Guid.Parse("efa6295a-c3ca-4a75-b06e-60cb14dc8559"),
+                    Guid.Parse("edfb5ce1-484b-42ba-914c-a5dc601bc73e")
+                }
             },
             new Teacher
             {
                 Id = Guid.Parse("52e19655-c4d5-4b39-bcd3-68e70a549280"),
                 Forename = "Natalie",
-                Surname = "Smith"
+                Surname = "Smith",
+                Students = new List<Guid>{
+                    Guid.Parse("5ad4179e-cd23-463a-8730-6d699a6ee462")
+                }
             },
             new Teacher
             {

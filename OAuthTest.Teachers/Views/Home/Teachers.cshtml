@@ -9,6 +9,7 @@
         <th scope="col">Id</th>
         <th scope="col">Forename</th>
         <th scope="col">Surname</th>
+        <th scope="col">Students</th>
     </tr>
     @foreach (var item in Model.Teachers)
     {
@@ -16,14 +17,14 @@
             <td>@item.Id</td>
             <td>@item.Forename</td>
             <td>@item.Surname</td>
+            <td>
+                <ul>
+                    @foreach (var student in item.Students)
+                    {
+                        <li>@student</li>
+                    }
+                </ul>
+            </td>
         </tr>
     }
-
 </table>
-
-<h2>Students List</h2>
-
-@foreach (var item in Model.Students)
-{
-    <p>@item</p>
-}

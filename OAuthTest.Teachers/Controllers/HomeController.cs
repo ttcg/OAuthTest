@@ -30,27 +30,46 @@ namespace OAuthTest.Teachers.Controllers
 
         public async Task<IActionResult> Teachers()
         {
-            var accessToken = await GetAccessTokenFromContext();
+            {
+                var accessToken = await GetAccessTokenFromContext();
 
-            var studentsList = await GetDataFromApi<List<string>>(ApiTypes.Student, "students/secured", accessToken);
+                List<Teacher> teachersList = await GetDataFromApi<List<Teacher>>(ApiTypes.Teacher, "teachers/secured", accessToken);
 
-            List<Teacher> teachersList = await GetDataFromApi<List<Teacher>>(ApiTypes.Teacher, "teachers/secured", accessToken);
+                if (teachersList == null)
+                    return RedirectToAction(nameof(AccessDenied));
 
-            if (studentsList == null || teachersList == null)
-                return RedirectToAction(nameof(AccessDenied));
+                var model = new TeachersViewModel();
 
-            var model = new TeachersViewModel
-            {                
-                Students = studentsList,
-                Teachers = teachersList.Select(x => new TeachersViewModel.Teacher
+                foreach (var teacher in teachersList)
                 {
-                    Id = x.Id,
-                    Forename = x.Forename,
-                    Surname = x.Surname
-                }).ToList()
-            };
+                    model.Teachers.Add(new TeachersViewModel.Teacher
+                    {
+                        Id = teacher.Id,
+                        Forename = teacher.Forename,
+                        Surname = teacher.Surname,
+                        Students = await GetStudents(teacher.Students, accessToken)
+                    });
+                }                
 
-            return View(model);
+                return View(model);
+            }
+
+            async Task<List<string>> GetStudents(List<Guid> ids, string accessToken)
+            {
+                var students = new List<string>();
+
+                if (ids.Any() == false)
+                    return students;
+
+                foreach (var id in ids)
+                {
+                    var student = await GetDataFromApi<Student>(ApiTypes.Student, $"students/{id}", accessToken);
+
+                    students.Add($"{student.Forename} {student.Surname}");
+                }
+
+                return students;
+            }
         }
 
         public IActionResult AccessDenied()
@@ -193,5 +212,14 @@ namespace OAuthTest.Teachers.Controllers
         public string Forename { get; set; }
         public string Surname { get; set; }
         public List<Guid> Students { get; set; } = new List<Guid>();
+    }
+
+    public class Student
+    {
+        public Guid Id { get; set; }
+        public string Forename { get; set; }
+        public string Surname { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public Guid ClassTeacherId { get; set; }
     }
 }

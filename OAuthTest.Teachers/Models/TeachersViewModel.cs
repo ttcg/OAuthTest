@@ -7,8 +7,6 @@ namespace OAuthTest.Teachers.Models
 {
     public class TeachersViewModel
     {
-        public List<string> Students { get; set; } = new List<string>();
-
         public List<Teacher> Teachers { get; set; } = new List<Teacher>();
 
         public sealed class Teacher
@@ -16,7 +14,7 @@ namespace OAuthTest.Teachers.Models
             public Guid Id { get; set; }
             public string Forename { get; set; }
             public string Surname { get; set; }
-            public List<Guid> Students { get; set; } = new List<Guid>();
+            public List<string> Students { get; set; } = new List<string>();
         }
     }
 }
