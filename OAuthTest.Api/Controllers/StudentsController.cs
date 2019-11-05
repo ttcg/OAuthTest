@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using OAuthTest.ApiStudents.ViewModels;
+using OAuthTest.ApiStudents.ViewModels.Api;
 using OAuthTest.Constants;
 
 namespace OAuthTest.ApiStudents.Controllers
@@ -30,9 +31,17 @@ namespace OAuthTest.ApiStudents.Controllers
         // GET api/students/secured
         [HttpGet("Secured")]
         [Authorize]
-        public IEnumerable<Student> GetStudents()
+        public async Task<IEnumerable<Student>> GetStudents()
         {
-            return TestData.Students;
+            var students = TestData.Students;
+
+            foreach(var student in students)
+            {
+                var teacher = await GetDataFromApi<Teacher>($"teachers/{student.ClassTeacherId}", await GetAccessTokenFromContext());
+                student.ClassTeacherName = $"{teacher.Forename} {teacher.Surname}";
+            }
+
+            return students;
         }
 
         [HttpGet("{id}")]
@@ -94,7 +103,7 @@ namespace OAuthTest.ApiStudents.Controllers
                 Forename = "Arv",
                 Surname = "Pidgley",
                 DateOfBirth = DateTime.ParseExact("08/24/2009", "MM/dd/yyyy", CultureInfo.InvariantCulture),
-                ClassTeacherId = Guid.Parse("f1e5f27b-8fbc-4baf-b769-f82c25ed551e")
+                ClassTeacherId = Guid.Parse("ef1670f9-cf98-4738-b3ef-5ba176ce1549")
             },
             new Student
             {
@@ -102,7 +111,7 @@ namespace OAuthTest.ApiStudents.Controllers
                 Forename = "Chantal",
                 Surname = "Bedow",
                 DateOfBirth = DateTime.ParseExact("08/21/2009", "MM/dd/yyyy", CultureInfo.InvariantCulture),
-                ClassTeacherId = Guid.Parse("f1e5f27b-8fbc-4baf-b769-f82c25ed551e")
+                ClassTeacherId = Guid.Parse("4a0f81ab-982c-4c04-ac3f-d420d0a6641d")
             },
             new Student
             {
@@ -110,7 +119,7 @@ namespace OAuthTest.ApiStudents.Controllers
                 Forename = "Harp",
                 Surname = "Isgar",
                 DateOfBirth = DateTime.ParseExact("10/21/2009", "MM/dd/yyyy", CultureInfo.InvariantCulture),
-                ClassTeacherId = Guid.Parse("f1e5f27b-8fbc-4baf-b769-f82c25ed551e")
+                ClassTeacherId = Guid.Parse("ef1670f9-cf98-4738-b3ef-5ba176ce1549")
             },
             new Student
             {
@@ -118,7 +127,7 @@ namespace OAuthTest.ApiStudents.Controllers
                 Forename = "Marnie",
                 Surname = "Hurrell",
                 DateOfBirth = DateTime.ParseExact("12/15/2008", "MM/dd/yyyy", CultureInfo.InvariantCulture),
-                ClassTeacherId = Guid.Parse("f1e5f27b-8fbc-4baf-b769-f82c25ed551e")
+                ClassTeacherId = Guid.Parse("52e19655-c4d5-4b39-bcd3-68e70a549280")
             },
             new Student
             {
@@ -126,7 +135,7 @@ namespace OAuthTest.ApiStudents.Controllers
                 Forename = "Danit",
                 Surname = "Leadley",
                 DateOfBirth = DateTime.ParseExact("11/08/2008", "MM/dd/yyyy", CultureInfo.InvariantCulture),
-                ClassTeacherId = Guid.Parse("f1e5f27b-8fbc-4baf-b769-f82c25ed551e")
+                ClassTeacherId = Guid.Parse("629f31f3-ad99-4d0d-ad77-a614dad93df1")
             }
         };
     }

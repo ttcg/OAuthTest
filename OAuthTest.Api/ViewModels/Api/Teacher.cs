@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OAuthTest.ApiStudents.ViewModels
+namespace OAuthTest.ApiStudents.ViewModels.Api
 {
-    public class Student
+    public class Teacher
     {
         public Guid Id { get; set; }
         public string Forename { get; set; }
         public string Surname { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public Guid ClassTeacherId { get; set; }
-        public string ClassTeacherName { get; set; }
     }
 }

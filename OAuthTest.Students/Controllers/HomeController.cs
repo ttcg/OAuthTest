@@ -100,7 +100,7 @@ namespace OAuthTest.Students.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminStudents()
         {
                 var accessToken = await GetAccessTokenFromContext();
@@ -119,7 +119,7 @@ namespace OAuthTest.Students.Controllers
                         Surname = x.Surname,
                         ClassTeacherId = x.ClassTeacherId,
                         DateOfBirth = x.DateOfBirth,
-                        TeacherName = "TBA"
+                        TeacherName = x.ClassTeacherName
                     }).ToList()
                 };
 
@@ -273,5 +273,6 @@ namespace OAuthTest.Students.Controllers
         public string Surname { get; set; }
         public DateTime DateOfBirth { get; set; }
         public Guid ClassTeacherId { get; set; }
+        public string ClassTeacherName { get; set; }
     }
 }
