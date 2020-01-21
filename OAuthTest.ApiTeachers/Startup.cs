@@ -33,7 +33,7 @@ namespace OAuthTest.ApiTeachers
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = Constants.Urls.IdentityServerProviderUrl;
-                    options.ApiName = Constants.Clients.ApiStudents;
+                    options.ApiName = Constants.Clients.ApiTeachers;
                 });
         }
 
