@@ -88,7 +88,8 @@ namespace OAuthTest.IDP
                 {
                     CreateStudentsClient(),
                     CreateTeachersClient(),
-                    CreatePostmanClient()
+                    CreatePostmanClient(),
+                    CreateTestApiClient()
                 };
             }
 
@@ -152,7 +153,7 @@ namespace OAuthTest.IDP
                 {
                     ClientName = "Postman Test Client",
                     ClientId = "postman",
-                    AllowedGrantTypes = GrantTypes.Code,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
 
                     RequireConsent = false,
                     RedirectUris = { "https://www.getpostman.com/oauth2/callback" },
@@ -160,6 +161,29 @@ namespace OAuthTest.IDP
                     ClientSecrets =
                         {
                             new Secret(Constants.Secrets.SharedSecret.Sha256())
+                        }
+                };
+            }
+
+            Client CreateTestApiClient()
+            {
+                return new Client
+                {
+                    ClientName = "Test Api Client",
+                    ClientId = "TestApiClient",
+
+                    // no interactive user, use the clientid/secret for authentication
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+                    AllowedScopes = new List<string>
+                        {
+                            Constants.Clients.ApiStudents,
+                            Constants.Clients.ApiTeachers
+                        },
+
+                    ClientSecrets =
+                        {
+                            new Secret("secret".Sha256())
                         }
                 };
             }
