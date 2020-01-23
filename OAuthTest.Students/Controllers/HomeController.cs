@@ -51,7 +51,7 @@ namespace OAuthTest.Students.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Students([FromQuery(Name = "secured")] string securedApi)
+        public async Task<IActionResult> Students()
         {
             {
                 var accessToken = await GetAccessTokenFromContext();
@@ -103,8 +103,7 @@ namespace OAuthTest.Students.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminStudents()
         {
-                var accessToken = await GetAccessTokenFromContext();
-                
+                var accessToken = await GetAccessTokenFromContext();                
 
                 var studentsList = await GetDataFromApi<List<Student>>(ApiTypes.Student, "students/secured", accessToken);
                 if (studentsList == null)
