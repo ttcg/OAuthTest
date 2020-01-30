@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.IDP", "OAuthTest.IDP\OAuthTest.IDP.csproj", "{38134D21-7D2F-4A09-A3A9-067860DE7623}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.ApiStudents", "OAuthTest.Api\OAuthTest.ApiStudents.csproj", "{ECAFBB26-CB35-4850-AAC8-39D7A38D5455}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.ApiStudents", "OAuthTest.ApiStudents\OAuthTest.ApiStudents.csproj", "{ECAFBB26-CB35-4850-AAC8-39D7A38D5455}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.Students", "OAuthTest.Students\OAuthTest.Students.csproj", "{F10593A9-A6F5-476C-B9D3-E77B3D09B326}"
 EndProject
