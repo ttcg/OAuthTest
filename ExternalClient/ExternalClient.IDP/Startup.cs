@@ -12,8 +12,13 @@ namespace ExternalClient.IDP
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public Startup(IHostingEnvironment env)
+        {            
+            HostingEnvironment = env;
+        }
+
+        public IHostingEnvironment HostingEnvironment { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
             {
@@ -38,18 +43,17 @@ namespace ExternalClient.IDP
 
             void ConfigureIdentityServer()
             {
-                services.AddIdentityServer()
-                    .AddDeveloperSigningCredential()
+                services.AddIdentityServer()                    
                     .AddInMemoryIdentityResources(Config.GetIdentityResources())
                     .AddInMemoryApiResources(Config.GetApiResources())
-                    .AddInMemoryClients(Config.GetClients());
+                    .AddInMemoryClients(Config.GetClients())
+                    .AddCustomSiginingCertificate(HostingEnvironment);
             }
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (HostingEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
