@@ -25,7 +25,9 @@ namespace OAuthTest.IDP
                         new Claim(JwtClaimTypes.FamilyName, "G"),
                         new Claim(JwtClaimTypes.Address, "Penn Way"),
                         new Claim(JwtClaimTypes.Role, "Admin"),
-                        new Claim(Constants.CustomClaimTypes.Country, "UK")
+                        new Claim(Constants.CustomClaimTypes.Country, "UK"),
+                        new Claim("custom_user_id", "24022020"),
+                        new Claim("custom_company_id", "999777"),
                     }
                 },
                 new TestUser
@@ -57,6 +59,23 @@ namespace OAuthTest.IDP
                         new Claim(Constants.CustomClaimTypes.Country, "MM")
                     }
                 },
+                new TestUser
+                {
+                    SubjectId = "CCCCFA5C-78DC-4A29-BD76-185C2F22F717",
+                    ProviderSubjectId = "111516297886809494694",
+                    ProviderName = "Google",
+                    Username = "thetwai2000@gmail.com",
+
+                    Claims = new List<Claim>
+                    {
+                        new Claim(JwtClaimTypes.GivenName, "Wai"),
+                        new Claim(JwtClaimTypes.FamilyName, "Thet"),
+                        new Claim(JwtClaimTypes.Address, "Ealing London"),
+                        new Claim(Constants.CustomClaimTypes.Country, "UK"),
+                        new Claim("custom_user_id", "11112222"),
+                        new Claim("custom_company_id", "33334444")
+                    }
+                },
             };
         }
 
@@ -68,7 +87,8 @@ namespace OAuthTest.IDP
                 new IdentityResources.Profile(),
                 new IdentityResources.Address(),
                 new IdentityResource("roles", "Your role(s)", new List<string> { JwtClaimTypes.Role }),
-                new IdentityResource("country", "Your Residence Country", new List<string> { Constants.CustomClaimTypes.Country })
+                new IdentityResource("country", "Your Residence Country", new List<string> { Constants.CustomClaimTypes.Country }),
+                new IdentityResource("custom_ids", "Custom Ids", new List<string> { "custom_user_id", "custom_company_id"})
             };
         }
 
@@ -76,7 +96,7 @@ namespace OAuthTest.IDP
         {
             return new List<ApiResource>
             {
-                new ApiResource(Constants.Clients.ApiStudents, "OAuth Test Api Students", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country }),
+                new ApiResource(Constants.Clients.ApiStudents, "OAuth Test Api Students", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country, "custom_user_id" }),
                 new ApiResource(Constants.Clients.ApiTeachers, "OAuth Test Api Teachers", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country })
             };
         }
@@ -198,7 +218,8 @@ namespace OAuthTest.IDP
                             "roles",
                             "country",
                             Constants.Clients.ApiStudents,
-                            Constants.Clients.ApiTeachers
+                            Constants.Clients.ApiTeachers,
+                            "custom_ids"
                 };
         }
     }

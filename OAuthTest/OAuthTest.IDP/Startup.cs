@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using OAuthTest.IDP.Repository;
 
 namespace OAuthTest.IDP
 {
@@ -18,6 +19,7 @@ namespace OAuthTest.IDP
         {
             {
                 services.AddMvc();
+                services.AddSingleton<UserRepository>();
 
                 ConfigureExternalAuthentications();
 
@@ -40,10 +42,12 @@ namespace OAuthTest.IDP
             {
                 services.AddIdentityServer()
                     .AddDeveloperSigningCredential()
-                    .AddTestUsers(Config.GetUsers())
+                    .AddTestUsers(Config.GetUsers()) 
                     .AddInMemoryIdentityResources(Config.GetIdentityResources())
                     .AddInMemoryApiResources(Config.GetApiResources())
-                    .AddInMemoryClients(Config.GetClients());
+                    .AddInMemoryClients(Config.GetClients())
+                    .AddProfileService<ProfileService>()
+                    ;
             }
         }
 

@@ -17,6 +17,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Globalization;
 using OAuthTest.Constants;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace OAuthTest.Students.Controllers
 {
@@ -48,6 +49,24 @@ namespace OAuthTest.Students.Controllers
 
                 return Ok("Test successful");
             }
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Diagnostic()
+        {
+            var viewModel = new DiagnosticViewModel
+            {
+                RefreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken),
+                AccessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken),                
+                UserClaims = User.Claims.ToList()
+            };
+
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(viewModel.AccessToken);
+
+            viewModel.JwtClaims = token.Claims.ToList();
+
+            return View(viewModel);
         }
 
         [Authorize]
@@ -103,26 +122,26 @@ namespace OAuthTest.Students.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminStudents()
         {
-                var accessToken = await GetAccessTokenFromContext();                
+            var accessToken = await GetAccessTokenFromContext();
 
-                var studentsList = await GetDataFromApi<List<Student>>(ApiTypes.Student, "students/secured", accessToken);
-                if (studentsList == null)
-                    return RedirectToAction(nameof(AccessDenied));
+            var studentsList = await GetDataFromApi<List<Student>>(ApiTypes.Student, "students/secured", accessToken);
+            if (studentsList == null)
+                return RedirectToAction(nameof(AccessDenied));
 
-                var model = new AdminStudentsViewModel
+            var model = new AdminStudentsViewModel
+            {
+                Students = studentsList.Select(x => new AdminStudentsViewModel.Student
                 {
-                    Students = studentsList.Select(x => new AdminStudentsViewModel.Student
-                    {
-                        Id = x.Id,
-                        Forename = x.Forename,
-                        Surname = x.Surname,
-                        ClassTeacherId = x.ClassTeacherId,
-                        DateOfBirth = x.DateOfBirth,
-                        TeacherName = x.ClassTeacherName
-                    }).ToList()
-                };
+                    Id = x.Id,
+                    Forename = x.Forename,
+                    Surname = x.Surname,
+                    ClassTeacherId = x.ClassTeacherId,
+                    DateOfBirth = x.DateOfBirth,
+                    TeacherName = x.ClassTeacherName
+                }).ToList()
+            };
 
-                return View(model);
+            return View(model);
         }
 
         [Authorize(Roles = "Admin")]
@@ -179,7 +198,7 @@ namespace OAuthTest.Students.Controllers
         {
             {
                 var currentContext = ControllerContext.HttpContext;
-                var currentRefreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);                
+                var currentRefreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
 
                 var disco = await GetDiscoveryDocumentResponse();
 
@@ -257,7 +276,7 @@ namespace OAuthTest.Students.Controllers
         async Task<DiscoveryDocumentResponse> GetDiscoveryDocumentResponse()
         {
             var client = new HttpClient();
-            
+
             var disco = await client.GetDiscoveryDocumentAsync(Constants.Urls.IdentityServerProviderUrl);
             if (disco.IsError) throw new Exception(disco.Error);
 

@@ -76,6 +76,7 @@ namespace OAuthTest.Students
                     options.Scope.Add("roles");
                     options.Scope.Add("country");
                     options.Scope.Add("offline_access");
+                    options.Scope.Add("custom_ids");
                     options.Scope.Add(Constants.Clients.ApiStudents);
                     options.Scope.Add(Constants.Clients.ApiTeachers);
 
@@ -89,6 +90,8 @@ namespace OAuthTest.Students
 
                     options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role);
                     options.ClaimActions.MapUniqueJsonKey(Constants.CustomClaimTypes.Country, Constants.CustomClaimTypes.Country);
+                    options.ClaimActions.MapUniqueJsonKey("custom_user_id", "custom_user_id");
+                    options.ClaimActions.MapUniqueJsonKey("custom_company_id", "custom_company_id");
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
