@@ -102,12 +102,12 @@ namespace IdentityServer4.Quickstart.UI
                 // this might be where you might initiate a custom workflow for user registration
                 // in this sample we don't show how that would be done, as our sample implementation
                 // simply auto-provisions new external user
-                var newuser = AutoProvisionUser(provider, providerUserId, claims);
-                //user = new User()
-                //{
-                //    SubjectId = providerUserId,
-                //    Username = providerUserId
-                //};
+                //var newuser = AutoProvisionUser(provider, providerUserId, claims);
+                user = new User()
+                {
+                    SubjectId = providerUserId,
+                    Username = providerUserId
+                };
             }
 
             // this allows us to collect any additonal claims or properties
@@ -115,18 +115,10 @@ namespace IdentityServer4.Quickstart.UI
             // this is typically used to store data needed for signout from those protocols.
             var additionalLocalClaims = new List<Claim>();
             var localSignInProps = new AuthenticationProperties();
-            ProcessLoginCallbackForOidc(result, additionalLocalClaims, localSignInProps);
-            var isuser = new IdentityServerUser(user.SubjectId)
-            {
-                DisplayName = user.Username,
-                IdentityProvider = provider,
-                AdditionalClaims = additionalLocalClaims
-            };
-
-            await HttpContext.SignInAsync(isuser, localSignInProps);
+            ProcessLoginCallbackForOidc(result, additionalLocalClaims, localSignInProps);            
 
             // issue authentication cookie for user
-            //await HttpContext.SignInAsync(user.SubjectId, user.Username, provider, localSignInProps, additionalLocalClaims.ToArray());
+            await HttpContext.SignInAsync(user.SubjectId, user.Username, provider, localSignInProps, additionalLocalClaims.ToArray());
             
             // delete temporary cookie used during external authentication
             await HttpContext.SignOutAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);

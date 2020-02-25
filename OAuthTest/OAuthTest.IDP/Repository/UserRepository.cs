@@ -11,8 +11,8 @@ namespace OAuthTest.IDP.Repository
             new User()
             {
                 SubjectId = "ABCDEF12-78DC-4A29-BD76-185C2F22F717",
-                Username = "TTCG2000",
-                Email = "ttcg2000@gmail.com",
+                Username = "Tun Gwa",
+                Email = "tungwa@gmail.com",
                 FirstForename = "Tun",
                 Surname = "Gwa",
                 Country = "UK",
@@ -24,7 +24,7 @@ namespace OAuthTest.IDP.Repository
             {
                 SubjectId = "78452916-D260-4219-927C-954F4E987E70",
                 Username = "ttcg",
-                Email = "ttcg3333@gmail.com",
+                Email = "ttcg2000@gmail.com",
                 FirstForename = "TTC",
                 Surname = "G",
                 Country = "UK",

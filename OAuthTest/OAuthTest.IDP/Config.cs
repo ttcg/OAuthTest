@@ -25,6 +25,7 @@ namespace OAuthTest.IDP
                         new Claim(JwtClaimTypes.FamilyName, "G"),
                         new Claim(JwtClaimTypes.Address, "Penn Way"),
                         new Claim(JwtClaimTypes.Role, "Admin"),
+                        new Claim(JwtClaimTypes.Email, "ttcg2000@gmail.com"),
                         new Claim(Constants.CustomClaimTypes.Country, "UK"),
                         new Claim("custom_user_id", "24022020"),
                         new Claim("custom_company_id", "999777"),
@@ -58,24 +59,7 @@ namespace OAuthTest.IDP
                         new Claim(JwtClaimTypes.Address, "Claremont Road"),
                         new Claim(Constants.CustomClaimTypes.Country, "MM")
                     }
-                },
-                new TestUser
-                {
-                    SubjectId = "CCCCFA5C-78DC-4A29-BD76-185C2F22F717",
-                    ProviderSubjectId = "111516297886809494694",
-                    ProviderName = "Google",
-                    Username = "thetwai2000@gmail.com",
-
-                    Claims = new List<Claim>
-                    {
-                        new Claim(JwtClaimTypes.GivenName, "Wai"),
-                        new Claim(JwtClaimTypes.FamilyName, "Thet"),
-                        new Claim(JwtClaimTypes.Address, "Ealing London"),
-                        new Claim(Constants.CustomClaimTypes.Country, "UK"),
-                        new Claim("custom_user_id", "11112222"),
-                        new Claim("custom_company_id", "33334444")
-                    }
-                },
+                }
             };
         }
 
