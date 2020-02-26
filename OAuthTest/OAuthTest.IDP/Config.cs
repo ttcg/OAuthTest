@@ -93,7 +93,8 @@ namespace OAuthTest.IDP
                     CreateStudentsClient(),
                     CreateTeachersClient(),
                     CreatePostmanClient(),
-                    CreateTestApiClient()
+                    CreateTestApiClient(),
+                    CreateTestMvcClient()
                 };
             }
 
@@ -189,6 +190,42 @@ namespace OAuthTest.IDP
                         {
                             new Secret("secret".Sha256())
                         }
+                };
+            }
+
+            Client CreateTestMvcClient()
+            {
+                var clientUrl = "http://localhost:64177";
+                return new Client
+                {
+                    ClientName = "Test Web Application",
+                    ClientId = "testwebapplication",
+                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    AccessTokenLifetime = 300,
+                    AllowOfflineAccess = true,
+                    RequireConsent = false,
+                    UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
+                    RedirectUris = new List<string>
+                    {
+                        $"{clientUrl}/signin-oidc"
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        $"{clientUrl}/signout-callback-oidc"
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        Constants.Clients.ApiStudents,
+                        "custom_ids"
+                    },
+                    ClientSecrets =
+                    {
+                        new Secret("t1webapplication".Sha256())
+                    },
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    AlwaysSendClientClaims = true
                 };
             }
 
