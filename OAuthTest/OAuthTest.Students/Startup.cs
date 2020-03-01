@@ -79,6 +79,7 @@ namespace OAuthTest.Students
                     options.Scope.Add("custom_ids");
                     options.Scope.Add(Constants.Clients.ApiStudents);
                     options.Scope.Add(Constants.Clients.ApiTeachers);
+                    options.Scope.Add(Constants.Clients.ApiCourses);
 
                     options.SaveTokens = true;
                     options.ClientSecret = Constants.Secrets.SharedSecret;

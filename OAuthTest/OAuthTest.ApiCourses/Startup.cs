@@ -1,13 +1,11 @@
 ﻿using IdentityServer4.AccessTokenValidation;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OAuthTest.ApiStudents.Authorization;
 
-namespace OAuthTest.ApiStudents
+namespace OAuthTest.ApiCourses
 {
     public class Startup
     {
@@ -28,20 +26,8 @@ namespace OAuthTest.ApiStudents
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = Constants.Urls.IdentityServerProviderUrl;
-                    options.ApiName = Constants.Clients.ApiStudents;
+                    options.ApiName = Constants.Clients.ApiCourses;
                 });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("UKResidenceOnly",
-                    policyBuilder =>
-                    {
-                        policyBuilder.RequireAuthenticatedUser();
-                        policyBuilder.AddRequirements(new MustLiveInUkRequirement());
-                    });
-            });
-
-            services.AddScoped<IAuthorizationHandler, MustLiveInUkHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

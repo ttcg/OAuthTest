@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.757
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.IDP", "OAuthTest.IDP\OAuthTest.IDP.csproj", "{38134D21-7D2F-4A09-A3A9-067860DE7623}"
 EndProject
@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.Constants", "OAut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.Teachers", "OAuthTest.Teachers\OAuthTest.Teachers.csproj", "{7DAEAE64-0D59-4B80-9565-F1B766C32F08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthTest.ApiTeachers", "OAuthTest.ApiTeachers\OAuthTest.ApiTeachers.csproj", "{7D19CD69-68BB-47A3-8DFD-8E93ACF20843}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.ApiTeachers", "OAuthTest.ApiTeachers\OAuthTest.ApiTeachers.csproj", "{7D19CD69-68BB-47A3-8DFD-8E93ACF20843}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthTest.ApiCourses", "OAuthTest.ApiCourses\OAuthTest.ApiCourses.csproj", "{D504C9D7-1804-4A6B-90CA-2529EF7B1A14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{7D19CD69-68BB-47A3-8DFD-8E93ACF20843}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D19CD69-68BB-47A3-8DFD-8E93ACF20843}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D19CD69-68BB-47A3-8DFD-8E93ACF20843}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D504C9D7-1804-4A6B-90CA-2529EF7B1A14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D504C9D7-1804-4A6B-90CA-2529EF7B1A14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D504C9D7-1804-4A6B-90CA-2529EF7B1A14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D504C9D7-1804-4A6B-90CA-2529EF7B1A14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
