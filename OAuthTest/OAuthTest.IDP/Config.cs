@@ -108,6 +108,7 @@ namespace OAuthTest.IDP
                     AllowOfflineAccess = true,
                     RequireConsent = false,
                     UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
+                    
                     RedirectUris = new List<string>
                         {
                             $"{Constants.Urls.StudentsUrl}/signin-oidc"
@@ -116,6 +117,7 @@ namespace OAuthTest.IDP
                         {
                             $"{Constants.Urls.StudentsUrl}/signout-callback-oidc"
                         },
+                    FrontChannelLogoutUri = $"{Constants.Urls.StudentsUrl}/Home/Logout",
                     AllowedScopes = PopulateScopes(),
                     ClientSecrets =
                         {
@@ -143,6 +145,7 @@ namespace OAuthTest.IDP
                         {
                             $"{Constants.Urls.TeachersUrl}/signout-callback-oidc"
                         },
+                    FrontChannelLogoutUri = $"{Constants.Urls.TeachersUrl}/Home/Logout",
                     AllowedScopes = PopulateScopes(),
                     ClientSecrets =
                         {

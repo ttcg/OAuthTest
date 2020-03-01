@@ -57,7 +57,8 @@ namespace OAuthTest.Students.Controllers
             var viewModel = new DiagnosticViewModel
             {
                 RefreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken),
-                AccessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken),                
+                AccessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken),
+                JwtClaims = new List<Claim>(),
                 UserClaims = User.Claims.ToList()
             };
 

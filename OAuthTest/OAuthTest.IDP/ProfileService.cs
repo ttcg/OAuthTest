@@ -1,4 +1,5 @@
 ﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -29,7 +30,7 @@ namespace OAuthTest.IDP
                 var user = _userRepository.FindBySubjectId(sub);
 
                 var claims = new List<Claim>();
-
+                
                 if (user != null)
                 {
                     claims.Add(new Claim("custom_user_id", user.UserId));
@@ -39,11 +40,10 @@ namespace OAuthTest.IDP
                     claims.Add(new Claim(JwtClaimTypes.Email, user.Email));
                     claims.Add(new Claim(JwtClaimTypes.GivenName, user.FirstForename));
                     claims.Add(new Claim(JwtClaimTypes.FamilyName, user.Surname));
+                    claims.Add(new Claim("role", "Admin"));
                 }
 
-                var claimsToReturn = claims.Where(x => context.RequestedClaimTypes.Contains(x.Type)).ToList();
-
-                context.IssuedClaims = claimsToReturn;
+                context.AddRequestedClaims(claims);
             }
         }
 
