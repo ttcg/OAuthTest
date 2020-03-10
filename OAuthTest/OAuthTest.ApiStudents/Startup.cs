@@ -1,4 +1,5 @@
-﻿using IdentityServer4.AccessTokenValidation;
+﻿using IdentityModel;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,7 @@ namespace OAuthTest.ApiStudents
                 {
                     options.Authority = Constants.Urls.IdentityServerProviderUrl;
                     options.ApiName = Constants.Clients.ApiStudents;
+                    options.ApiSecret = "secret";
                 });
 
             services.AddAuthorization(options =>

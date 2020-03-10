@@ -72,7 +72,7 @@ namespace OAuthTest.IDP
                 new IdentityResources.Address(),
                 new IdentityResource("roles", "Your role(s)", new List<string> { JwtClaimTypes.Role }),
                 new IdentityResource("country", "Your Residence Country", new List<string> { Constants.CustomClaimTypes.Country }),
-                new IdentityResource("custom_ids", "Custom Ids", new List<string> { "custom_user_id", "custom_company_id"})
+                new IdentityResource("custom_ids", "Custom Ids", new List<string> { "custom_user_id", "custom_company_id", "permissions"})
             };
         }
 
@@ -80,7 +80,10 @@ namespace OAuthTest.IDP
         {
             return new List<ApiResource>
             {
-                new ApiResource(Constants.Clients.ApiStudents, "OAuth Test Api Students", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country, "custom_user_id" }),
+                new ApiResource(Constants.Clients.ApiStudents, "OAuth Test Api Students", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country, "custom_user_id" })
+                {
+                    ApiSecrets = { new Secret("secret".ToSha256()) }
+                },
                 new ApiResource(Constants.Clients.ApiTeachers, "OAuth Test Api Teachers", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country }),
                 new ApiResource(Constants.Clients.ApiCourses, "OAuth Test Api Courses", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country })
             };
@@ -110,7 +113,7 @@ namespace OAuthTest.IDP
                     AllowOfflineAccess = true,
                     RequireConsent = false,
                     UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
-                    
+                    AccessTokenType = AccessTokenType.Reference,
                     RedirectUris = new List<string>
                         {
                             $"{Constants.Urls.StudentsUrl}/signin-oidc"

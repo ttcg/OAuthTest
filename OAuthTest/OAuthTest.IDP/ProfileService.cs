@@ -3,6 +3,7 @@ using IdentityServer4;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
+using Newtonsoft.Json;
 using OAuthTest.IDP.Repository;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace OAuthTest.IDP
                 var user = _userRepository.FindBySubjectId(sub);
 
                 var claims = new List<Claim>();
-                
+
                 if (user != null)
                 {
                     claims.Add(new Claim("custom_user_id", user.UserId));
@@ -41,6 +42,18 @@ namespace OAuthTest.IDP
                     claims.Add(new Claim(JwtClaimTypes.GivenName, user.FirstForename));
                     claims.Add(new Claim(JwtClaimTypes.FamilyName, user.Surname));
                     claims.Add(new Claim("role", "Admin"));
+                }
+
+                if (context.Caller == IdentityServerConstants.ProfileDataCallers.UserInfoEndpoint)
+                {
+                    var bigSetOfClaims = new Dictionary<string, string>();
+
+                    for (int i = 1; i<= 10; i++)
+                    {
+                        bigSetOfClaims.Add($"key{i}", Guid.NewGuid().ToString().ToSha256());
+                    }
+
+                    claims.Add(new Claim("permissions", JsonConvert.SerializeObject(bigSetOfClaims), IdentityServerConstants.ClaimValueTypes.Json));
                 }
 
                 context.AddRequestedClaims(claims);

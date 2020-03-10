@@ -39,6 +39,11 @@ namespace OAuthTest.IDP.Repository
             return _users.SingleOrDefault(x => string.Equals(x.Email, email, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        public User FindByUsername(string username)
+        {
+            return _users.SingleOrDefault(x => string.Equals(x.Username, username, StringComparison.InvariantCultureIgnoreCase));
+        }
+
         public User FindBySubjectId(string subjectId)
         {
             return _users.SingleOrDefault(x => string.Equals(x.SubjectId, subjectId, StringComparison.InvariantCultureIgnoreCase));

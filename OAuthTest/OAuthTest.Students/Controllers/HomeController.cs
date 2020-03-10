@@ -39,19 +39,6 @@ namespace OAuthTest.Students.Controllers
         }
 
         [Authorize]
-        public IActionResult Test()
-        {
-            {
-                foreach (var claim in User.Claims)
-                {
-                    Debug.WriteLine($"xxxxxxxxxxxxxxxxxxxx Claim - {claim.Type} : {claim.Value} xxxxxxxxxxxxxxxxxxxxxxxx");
-                }
-
-                return Ok("Test successful");
-            }
-        }
-
-        [Authorize]
         public async Task<IActionResult> Diagnostic()
         {
             var viewModel = new DiagnosticViewModel
@@ -62,10 +49,14 @@ namespace OAuthTest.Students.Controllers
                 UserClaims = User.Claims.ToList()
             };
 
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(viewModel.AccessToken);
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var token = handler.ReadJwtToken(viewModel.AccessToken);
 
-            viewModel.JwtClaims = token.Claims.ToList();
+                viewModel.JwtClaims = token.Claims.ToList();
+            }
+            catch { }
 
             return View(viewModel);
         }
@@ -98,6 +89,10 @@ namespace OAuthTest.Students.Controllers
                     Role = response.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role)?.Value,
                     Students = studentsList
                 };
+
+                // get first student detail
+                var studentDetail = await GetDataFromApi<Student> (ApiTypes.Student, "students/f1e5f27b-8fbc-4baf-b769-f82c25ed551e", accessToken);
+                model.Students[0] = model.Students[0] + ", " + studentDetail.DateOfBirth.ToShortDateString();
 
                 return View(model);
             }

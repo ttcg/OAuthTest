@@ -83,7 +83,7 @@ namespace OAuthTest.Students
 
                     options.SaveTokens = true;
                     options.ClientSecret = Constants.Secrets.SharedSecret;
-                    options.GetClaimsFromUserInfoEndpoint = true;
+                    //options.GetClaimsFromUserInfoEndpoint = true;
 
                     options.ClaimActions.Remove("amr");
                     options.ClaimActions.DeleteClaim("sid");
