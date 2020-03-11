@@ -113,7 +113,7 @@ namespace OAuthTest.IDP
                     AllowOfflineAccess = true,
                     RequireConsent = false,
                     UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
-                    AccessTokenType = AccessTokenType.Reference,
+                    //AccessTokenType = AccessTokenType.Reference,
                     RedirectUris = new List<string>
                         {
                             $"{Constants.Urls.StudentsUrl}/signin-oidc"

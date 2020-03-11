@@ -1,0 +1,41 @@
+﻿@model OAuthTest.Teachers.Models.DiagnosticViewModel
+@{
+    ViewData["Title"] = "Diagnostic";
+}
+<h1>@ViewData["Title"]</h1>
+
+<h3>Refresh Token</h3>
+@Model.RefreshToken
+
+<h3>Access Token</h3>
+@Model.AccessToken
+
+<h3>Access Token - Jwt Claims</h3>
+<table class="table-striped table table-bordered">
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Value</th>
+    </tr>
+    @foreach (var item in Model.JwtClaims)
+    {
+        <tr>
+            <td>@item.Type</td>
+            <td>@item.Value</td>
+        </tr>
+    }
+</table>
+
+<h3>User Context - Claims</h3>
+<table class="table-striped table table-bordered">
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Value</th>
+    </tr>
+    @foreach (var item in Model.UserClaims)
+    {
+        <tr>
+            <td>@item.Type</td>
+            <td>@item.Value</td>
+        </tr>
+    }
+</table>

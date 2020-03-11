@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -81,6 +82,29 @@ namespace OAuthTest.Teachers.Controllers
         {
             await HttpContext.SignOutAsync("Cookies");
             await HttpContext.SignOutAsync("oidc");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Diagnostic()
+        {
+            var viewModel = new DiagnosticViewModel
+            {
+                RefreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken),
+                AccessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken),
+                JwtClaims = new List<Claim>(),
+                UserClaims = User.Claims.ToList()
+            };
+
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var token = handler.ReadJwtToken(viewModel.AccessToken);
+
+                viewModel.JwtClaims = token.Claims.ToList();
+            }
+            catch { }
+
+            return View(viewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
