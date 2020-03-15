@@ -98,7 +98,8 @@ namespace OAuthTest.IDP
                     CreateTeachersClient(),
                     CreatePostmanClient(),
                     CreateTestApiClient(),
-                    CreateTestMvcClient()
+                    CreateTestMvcClient(),
+                    CreateTestReactClient()
                 };
             }
 
@@ -233,6 +234,36 @@ namespace OAuthTest.IDP
                     },
                     AlwaysIncludeUserClaimsInIdToken = true,
                     AlwaysSendClientClaims = true
+                };
+            }
+
+            Client CreateTestReactClient()
+            {
+                var clientUrl = "http://localhost:3000";
+                return new Client
+                {
+                    ClientId = "react-test-client",
+                    ClientName = "React Test Client",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,    
+                    RequireConsent = false,
+
+                    // where to redirect to after login
+                    RedirectUris = { $"{clientUrl}/callback" },
+
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = { $"{clientUrl}/index.html" },
+
+                    AllowedCorsOrigins = { "http://localhost:3000" },
+
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        Constants.Clients.ApiStudents
+                    }
+
                 };
             }
 

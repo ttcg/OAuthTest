@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer4.Models;
+using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,10 +44,11 @@ namespace OAuthTest.IDP
             {
                 services.AddIdentityServer()
                     .AddDeveloperSigningCredential()
-                    .AddTestUsers(Config.GetUsers()) 
+                    .AddTestUsers(Config.GetUsers())
                     .AddInMemoryIdentityResources(Config.GetIdentityResources())
                     .AddInMemoryApiResources(Config.GetApiResources())
                     .AddInMemoryClients(Config.GetClients())
+                    //.AddClientStore<CustomClientStore>()                    
                     .AddProfileService<ProfileService>()
                     ;
             }

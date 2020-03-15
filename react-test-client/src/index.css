@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.button {
+  padding: 10px;
+  margin: 10px;
+}
+
+.result {
+  padding: 10px;
+  margin: 0px auto;
+  max-width: 600px;
+  text-align: left;
+  justify-content: left;
+  font-size: 12pt;
+}

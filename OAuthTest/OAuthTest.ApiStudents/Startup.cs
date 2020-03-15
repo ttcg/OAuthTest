@@ -22,6 +22,19 @@ namespace OAuthTest.ApiStudents
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                    });
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddAuthentication(
@@ -42,7 +55,7 @@ namespace OAuthTest.ApiStudents
                         policyBuilder.AddRequirements(new MustLiveInUkRequirement());
                     });
             });
-
+            
             services.AddScoped<IAuthorizationHandler, MustLiveInUkHandler>();
         }
 
@@ -60,6 +73,8 @@ namespace OAuthTest.ApiStudents
             }
 
             app.UseAuthentication();
+
+            app.UseCors("AllowAll");
 
             app.UseHttpsRedirection();
             app.UseMvc();
