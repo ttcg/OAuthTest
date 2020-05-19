@@ -57,6 +57,7 @@ namespace OAuthTest.IDP
                 }
 
                 context.AddRequestedClaims(claims);
+                //context.IssuedClaims = claims;
             }
         }
 

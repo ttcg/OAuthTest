@@ -72,6 +72,7 @@ namespace OAuthTest.Students
 
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
+                    options.Scope.Add("email");
                     options.Scope.Add("address");
                     options.Scope.Add("roles");
                     options.Scope.Add("country");

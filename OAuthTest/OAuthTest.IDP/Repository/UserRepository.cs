@@ -31,8 +31,20 @@ namespace OAuthTest.IDP.Repository
                 Address = "Stevenage",
                 UserId = "24022020",
                 CompanyId = "999777"
+            },
+            new User()
+            {
+                SubjectId = "1",
+                Username = "alicesmith",
+                Email = "AliceSmith@email.com",
+                FirstForename = "Alice",
+                Surname = "Smith",
+                Country = "UK",
+                Address = "One Hacker Way",
+                UserId = "19052020",
+                CompanyId = "999777"
             }
-        };
+        }; 
 
         public User FindByEmail(string email)
         {

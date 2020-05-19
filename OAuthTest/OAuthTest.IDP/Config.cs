@@ -69,6 +69,7 @@ namespace OAuthTest.IDP
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Email(),
                 new IdentityResources.Address(),
                 new IdentityResource("roles", "Your role(s)", new List<string> { JwtClaimTypes.Role }),
                 new IdentityResource("country", "Your Residence Country", new List<string> { Constants.CustomClaimTypes.Country }),
@@ -272,6 +273,7 @@ namespace OAuthTest.IDP
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
                             IdentityServerConstants.StandardScopes.Profile,
+                            IdentityServerConstants.StandardScopes.Email,
                             IdentityServerConstants.StandardScopes.Address,
                             IdentityServerConstants.StandardScopes.OfflineAccess,
                             "roles",

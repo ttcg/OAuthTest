@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.ResponseHandling;
 using IdentityServer4.Services;
@@ -44,6 +45,24 @@ namespace OAuthTest.IDP
 
                     options.ClientId = "319143812640-qntvt2snefo4hmh43fiuj2j1a7ju5l0c.apps.googleusercontent.com";
                     options.ClientSecret = "Oj9DaTHFrhqe7xoxK_G1LWeO";
+                })
+                .AddOpenIdConnect("demoidsrv", "IdentityServer", options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.SignOutScheme = IdentityServerConstants.SignoutScheme;
+
+                    options.Authority = "https://demo.identityserver.io/";
+                    options.ClientId = "implicit";
+                    options.ResponseType = "id_token";
+                    options.SaveTokens = true;
+
+                    options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
+                    options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
+                    options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
+                    
+                    options.CallbackPath = "/signin-idsrv";
+                    options.SignedOutCallbackPath = "/signout-callback-idsrv";
+                    options.RemoteSignOutPath = "/signout-idsrv";
                 });
             }
 
@@ -70,6 +89,7 @@ namespace OAuthTest.IDP
             }
 
             app.UseIdentityServer();
+
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
         }
