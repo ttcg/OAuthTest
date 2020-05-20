@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Impersonate";
+}
+
+<h1>Impersonate</h1>
+
+<p><a href="@OAuthTest.Constants.Urls.IdentityServerProviderUrl/tools/impersonate?userid=81E045ED-7EA0-4F13-BEE6-88459B3B27AB&returnUrl=@OAuthTest.Constants.Urls.StudentsUrl/Home/ImpersonateCallback">Sign in as John</a></p>
+<p>
+    <a href="@OAuthTest.Constants.Urls.IdentityServerProviderUrl/tools/impersonate?userid=78452916-D260-4219-927C-954F4E987E70&returnUrl=@OAuthTest.Constants.Urls.StudentsUrl/Home/ImpersonateCallback">Sign in as TTCG (Admin)</a>
+</p>
+<p><a href="@OAuthTest.Constants.Urls.IdentityServerProviderUrl/tools/unimpersonate?returnUrl=@OAuthTest.Constants.Urls.StudentsUrl/Home/ImpersonateCallback">UnImpersonate current user</a></p>

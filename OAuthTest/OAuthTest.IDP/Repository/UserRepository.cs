@@ -43,6 +43,30 @@ namespace OAuthTest.IDP.Repository
                 Address = "One Hacker Way",
                 UserId = "19052020",
                 CompanyId = "999777"
+            },
+            new User()
+            {
+                SubjectId = "C333FA5C-78DC-4A29-BD76-185C2F22F717",
+                Username = "Alex",
+                Email = "alex@gmail.com",
+                FirstForename = "Alex",
+                Surname = "Webb",
+                Country = "MM",
+                Address = "Claremont Road",
+                UserId = "11112222",
+                CompanyId = "33334444"
+            },
+            new User()
+            {
+                SubjectId = "81E045ED-7EA0-4F13-BEE6-88459B3B27AB",
+                Username = "John",
+                Email = "john@gmail.com",
+                FirstForename = "John",
+                Surname = "Smith",
+                Country = "MM",
+                Address = "Thiri Street",
+                UserId = "11112222",
+                CompanyId = "33334444"
             }
         }; 
 

@@ -146,6 +146,12 @@ namespace OAuthTest.Students.Controllers
             return View();
         }
 
+        [Authorize]
+        public IActionResult Impersonate()
+        {
+            return View();
+        }
+
         public IActionResult AccessDenied()
         {
             return View();
@@ -155,6 +161,13 @@ namespace OAuthTest.Students.Controllers
         {
             await HttpContext.SignOutAsync("Cookies");
             await HttpContext.SignOutAsync("oidc");
+        }
+
+        public async Task<IActionResult> ImpersonateCallback()
+        {
+            await HttpContext.SignOutAsync("Cookies");
+            await HttpContext.SignOutAsync("oidc");
+            return RedirectToAction("Diagnostic");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
