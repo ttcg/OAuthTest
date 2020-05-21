@@ -38,29 +38,22 @@ namespace OAuthTest.IDP.Quickstart.Account
         [Authorize]
         public async Task<IActionResult> Impersonate(string userId, string returnUrl)
         {
-            // Get user from database
+            // Get user to impersonate from database
             var user = _userRepository.FindBySubjectId(userId);
-
             if (user == null)
                 return Unauthorized("User not found");
 
-            var currentUserId = User.FindFirst(JwtClaimTypes.Subject).Value.ToLower().ToString();            
+            var currentUserId = User.FindFirst(JwtClaimTypes.Subject).Value.ToLower().ToString();
 
-            // delete local authentication cookie
-            await HttpContext.SignOutAsync();
+            // sign out current user
+            await CustomSignOutAsync(currentUserId);
 
-            // raise the logout event
-            await _events.RaiseAsync(new UserLogoutSuccessEvent(currentUserId, string.Empty));
-
-            await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username));
-
+            // sign in as user to impersonate
             var additionalLocalClaims = new List<Claim>()
             {
-                new Claim(OriginalUserIdClaimName, currentUserId)
-            };
-
-            // issue authentication cookie for user
-            await HttpContext.SignInAsync(user.SubjectId, user.Username, additionalLocalClaims.ToArray());
+                new Claim(OriginalUserIdClaimName, currentUserId) // store in the local claim to un-impersonate in the future
+            };            
+            await CustomSignInAsync(user, additionalLocalClaims);
 
             if (string.IsNullOrWhiteSpace(returnUrl))
             {
@@ -77,30 +70,20 @@ namespace OAuthTest.IDP.Quickstart.Account
         {
             // get original user id back to Signin again
             var originalUserId = User.FindFirst(OriginalUserIdClaimName);
-
             if (originalUserId == null)
                 return Unauthorized("There is no user found to unimpersonate");
 
             // Get user from database
             var user = _userRepository.FindBySubjectId(originalUserId.Value);
-
             if (user == null)
                 return Unauthorized("User Id not found");
 
-            var additionalLocalClaims = new List<Claim>();
-
+            // sign out current user
             var currentUserId = User.FindFirst(JwtClaimTypes.Subject).Value.ToLower().ToString();
+            await CustomSignOutAsync(currentUserId);
 
-            // delete local authentication cookie
-            await HttpContext.SignOutAsync();
-
-            // raise the logout event
-            await _events.RaiseAsync(new UserLogoutSuccessEvent(currentUserId, string.Empty));
-
-            await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username));
-
-            // issue authentication cookie for user
-            await HttpContext.SignInAsync(user.SubjectId, user.Username, additionalLocalClaims.ToArray());
+            // sign in as original user
+            await CustomSignInAsync(user, new List<Claim>());
 
             if (string.IsNullOrWhiteSpace(returnUrl))
             {
@@ -110,6 +93,23 @@ namespace OAuthTest.IDP.Quickstart.Account
             {
                 return Redirect(returnUrl);
             }
+        }
+
+        private async Task CustomSignInAsync(User user, List<Claim> additionalLocalClaims)
+        {
+            await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username));
+
+            // issue authentication cookie for user
+            await HttpContext.SignInAsync(user.SubjectId, user.Username, additionalLocalClaims.ToArray());
+        }
+
+        private async Task CustomSignOutAsync(string currentUserId)
+        {
+            // delete local authentication cookie
+            await HttpContext.SignOutAsync();
+
+            // raise the logout event
+            await _events.RaiseAsync(new UserLogoutSuccessEvent(currentUserId, string.Empty));
         }
     }
 }
