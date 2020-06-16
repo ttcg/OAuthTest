@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Threading.Tasks;
 using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.ResponseHandling;
@@ -10,21 +12,51 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using OAuthTest.IDP.Repository;
 
 namespace OAuthTest.IDP
 {
     public class Startup
     {
+        //private string[] supportedCultures = new[] { "en-US", "fr", "es" };
+
+
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             {
-                services.AddMvc();
+                services.AddLocalization(option =>
+                {
+                    option.ResourcesPath = "Resources";
+                });
+
+                services.AddMvcCore()
+                    .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix,
+                    options => options.ResourcesPath = "Resources");
+
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en-GB"),
+                    new CultureInfo("fr-FR"),
+                    new CultureInfo("es-ES")
+                };
+
+                services.Configure<RequestLocalizationOptions>(options =>
+                {
+                    options.SetDefaultCulture(supportedCultures[0].Name);
+                    options.SupportedCultures = supportedCultures;
+                    options.SupportedUICultures = supportedCultures;
+                    options.FallBackToParentCultures = true;
+                    options.FallBackToParentUICultures = true;
+                });
+
                 services.AddSingleton<UserRepository>();
 
                 ConfigureExternalAuthentications();
@@ -59,7 +91,7 @@ namespace OAuthTest.IDP
                     options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
                     options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
                     options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
-                    
+
                     options.CallbackPath = "/signin-idsrv";
                     options.SignedOutCallbackPath = "/signout-callback-idsrv";
                     options.RemoteSignOutPath = "/signout-idsrv";
@@ -89,6 +121,9 @@ namespace OAuthTest.IDP
             }
 
             app.UseIdentityServer();
+
+            var localizationOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>().Value;
+            app.UseRequestLocalization(localizationOptions);
 
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
@@ -121,5 +156,5 @@ namespace OAuthTest.IDP
 
             return result;
         }
-    }    
+    }
 }

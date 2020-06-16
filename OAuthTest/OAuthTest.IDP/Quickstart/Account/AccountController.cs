@@ -13,9 +13,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using OAuthTest.IDP;
 using OAuthTest.IDP.Repository;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -36,6 +38,7 @@ namespace IdentityServer4.Quickstart.UI
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
         private readonly UserRepository _userRepository;
+        private readonly IStringLocalizer<AccountController> _localizer;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
@@ -43,6 +46,7 @@ namespace IdentityServer4.Quickstart.UI
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
             UserRepository userRepository,
+            IStringLocalizer<AccountController> localizer,
             TestUserStore users = null)
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
@@ -53,6 +57,8 @@ namespace IdentityServer4.Quickstart.UI
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
+
+            _localizer = localizer;
 
             _userRepository = userRepository;
         }
@@ -169,7 +175,7 @@ namespace IdentityServer4.Quickstart.UI
                 }
 
                 await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId:context?.ClientId));
-                ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
+                ModelState.AddModelError(string.Empty, _localizer[AccountOptions.InvalidCredentialsErrorMessage]);
             }
 
             // something went wrong, show form with error
@@ -184,6 +190,10 @@ namespace IdentityServer4.Quickstart.UI
         [HttpGet]
         public async Task<IActionResult> Logout(string logoutId)
         {
+            //var culture = new CultureInfo("fr-FR");
+            //CultureInfo.DefaultThreadCurrentCulture = culture;
+            //CultureInfo.DefaultThreadCurrentUICulture = culture;
+
             // build a model so the logout page knows what to display
             var vm = await BuildLogoutViewModelAsync(logoutId);
 
