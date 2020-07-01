@@ -63,7 +63,7 @@ namespace OAuthTest.IDP
 
                 ConfigureIdentityServer();
 
-                // demonstration of replacing the default implemenation with custom implemenation
+                // demonstration of replacing the default implementation with custom implementation
                 services.Replace(ServiceDescriptor.Transient<ITokenService, CustomTokenService>());
                 services.Replace(ServiceDescriptor.Transient<ITokenResponseGenerator, CustomTokenResponseGenerator>());
             }

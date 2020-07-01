@@ -114,8 +114,9 @@ namespace OAuthTest.IDP
                     AccessTokenLifetime = 300,
                     AllowOfflineAccess = true,
                     RequireConsent = false,
+                    
                     UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
-                    //AccessTokenType = AccessTokenType.Reference,
+                    AccessTokenType = AccessTokenType.Reference,
                     RedirectUris = new List<string>
                         {
                             $"{Constants.Urls.StudentsUrl}/signin-oidc"
@@ -143,6 +144,7 @@ namespace OAuthTest.IDP
                     AccessTokenLifetime = 300,
                     AllowOfflineAccess = true,
                     RequireConsent = false,
+                    AccessTokenType = AccessTokenType.Reference,
                     UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
                     RedirectUris = new List<string>
                         {
@@ -167,10 +169,12 @@ namespace OAuthTest.IDP
                 {
                     ClientName = "Postman Test Client",
                     ClientId = "postman",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RedirectUris = { "https://www.getpostman.com/oauth2/callback", "https://oauth.pstmn.io/v1/callback" },
 
+                    AccessTokenType = AccessTokenType.Reference,
+                    AllowOfflineAccess = true,
                     RequireConsent = false,
-                    RedirectUris = { "https://www.getpostman.com/oauth2/callback" },
                     AllowedScopes = PopulateScopes(),
                     ClientSecrets =
                         {
@@ -247,7 +251,7 @@ namespace OAuthTest.IDP
                     ClientName = "React Test Client",
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
-                    RequireClientSecret = false,    
+                    RequireClientSecret = false,
                     RequireConsent = false,
 
                     // where to redirect to after login
