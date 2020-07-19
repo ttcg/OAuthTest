@@ -94,7 +94,7 @@ namespace IdentityServer4.Quickstart.UI
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
             // the user clicked the "cancel" button
-            if (button != "login")
+            if (button == "cancel")
             {
                 if (context != null)
                 {
