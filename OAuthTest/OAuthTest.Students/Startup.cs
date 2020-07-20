@@ -1,4 +1,6 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Threading;
 using System.Threading.Tasks;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace OAuthTest.Students
@@ -105,11 +108,27 @@ namespace OAuthTest.Students
 
                     options.Events = new OpenIdConnectEvents
                     {
+                        OnRedirectToIdentityProvider = ctx =>
+                        {
+                            ctx.ProtocolMessage.UiLocales = Thread.CurrentThread.CurrentUICulture.Name;
+                            ctx.ProtocolMessage.State = $"Request Sent at {DateTime.UtcNow}";
+                            return Task.CompletedTask;
+                        },
+                        OnAuthorizationCodeReceived = ctx =>
+                        {
+                            Console.WriteLine("OnAuthorizationCodeReceived");
+                            return Task.CompletedTask;
+                        },
+                        OnUserInformationReceived = ctx =>
+                        {
+                            Console.WriteLine("OnUserInformationReceived ");
+                            return Task.CompletedTask;
+                        },
                         OnRemoteFailure = context => {
                             context.Response.Redirect("/");
                             context.HandleResponse();
 
-                            return Task.FromResult(0);
+                            return Task.CompletedTask;
                         }
                     };
                 });
