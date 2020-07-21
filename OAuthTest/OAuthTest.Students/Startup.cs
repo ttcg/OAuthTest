@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,10 +9,13 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace OAuthTest.Students
@@ -37,11 +41,32 @@ namespace OAuthTest.Students
                     options.MinimumSameSitePolicy = SameSiteMode.None;
                 });
 
+                services.AddLocalization(option =>
+                {
+                    option.ResourcesPath = "Resources";
+                });                
 
-                services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en-GB"),
+                    new CultureInfo("fr-FR"),
+                    new CultureInfo("es-ES")
+                };
+
+                services.Configure<RequestLocalizationOptions>(options =>
+                {
+                    options.DefaultRequestCulture = new RequestCulture(supportedCultures[0]);
+                    options.SupportedCultures = supportedCultures;
+                    options.SupportedUICultures = supportedCultures;
+                });
 
                 ConfigureAuthorization();
                 ConfigureAuthentication();
+
+                services.AddMvc()
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                    .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix,
+                    options => options.ResourcesPath = "Resources");
             }
 
             void ConfigureAuthorization()
@@ -124,7 +149,8 @@ namespace OAuthTest.Students
                             Console.WriteLine("OnUserInformationReceived ");
                             return Task.CompletedTask;
                         },
-                        OnRemoteFailure = context => {
+                        OnRemoteFailure = context =>
+                        {
                             context.Response.Redirect("/");
                             context.HandleResponse();
 
@@ -148,6 +174,9 @@ namespace OAuthTest.Students
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            var localizationOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>().Value;
+            app.UseRequestLocalization(localizationOptions);
 
             app.UseAuthentication();
             app.UseHttpsRedirection();

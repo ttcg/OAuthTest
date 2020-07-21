@@ -18,6 +18,8 @@ using Newtonsoft.Json;
 using System.Globalization;
 using OAuthTest.Constants;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Http;
 
 namespace OAuthTest.Students.Controllers
 {
@@ -25,6 +27,12 @@ namespace OAuthTest.Students.Controllers
     {
         public IActionResult Index()
         {
+            Response.Cookies.Append(
+                 CookieRequestCultureProvider.DefaultCookieName,
+                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(CultureInfo.CurrentCulture)),
+                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+                );
+
             return View();
         }
 

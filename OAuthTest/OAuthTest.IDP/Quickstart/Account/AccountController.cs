@@ -12,6 +12,7 @@ using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using OAuthTest.IDP;
@@ -71,6 +72,19 @@ namespace IdentityServer4.Quickstart.UI
         {
             // build a model so we know what to show on the login page
             var vm = await BuildLoginViewModelAsync(returnUrl);
+
+            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+
+            if (string.IsNullOrWhiteSpace(context.UiLocales) == false)
+            {
+                var requestedCulture = new CultureInfo(context.UiLocales);
+
+                Response.Cookies.Append(
+                 CookieRequestCultureProvider.DefaultCookieName,
+                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(requestedCulture)),
+                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+                );
+            }
 
             if (vm.IsExternalLoginOnly)
             {

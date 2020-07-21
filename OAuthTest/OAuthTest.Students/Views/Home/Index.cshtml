@@ -1,7 +1,15 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 style="color: red">Students System</h1>    
+    <h1 style="color: red">Students System</h1>
+    <h2>@Localizer["Welcome"]</h2>
+    <p>Current Culture: @System.Threading.Thread.CurrentThread.CurrentCulture.Name</p>
+
+    <p>
+        <a href="~/?culture=en-GB">en-GB</a> || <a href="~/?culture=fr-FR">fr-FR</a> || <a href="~/?culture=es-ES">es-ES</a>
+    </p>
 </div>
