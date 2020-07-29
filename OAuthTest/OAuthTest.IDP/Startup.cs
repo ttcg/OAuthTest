@@ -43,7 +43,7 @@ namespace OAuthTest.IDP
 
                 var supportedCultures = new[]
                 {
-                    new CultureInfo("en-GB"),
+                    new CultureInfo("en-US"),
                     new CultureInfo("fr-FR"),
                     new CultureInfo("es-ES")
                 };
@@ -92,7 +92,7 @@ namespace OAuthTest.IDP
                     options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
                     options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
 
-                    options.CallbackPath = "/signin-idsrv";
+                    options.CallbackPath = "/signin-aholdibm";
                     options.SignedOutCallbackPath = "/signout-callback-idsrv";
                     options.RemoteSignOutPath = "/signout-idsrv";
                 });
