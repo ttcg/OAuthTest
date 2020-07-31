@@ -92,7 +92,7 @@ namespace OAuthTest.IDP
                     options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
                     options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
 
-                    options.CallbackPath = "/signin-aholdibm";
+                    options.CallbackPath = "/signin-idsrv";
                     options.SignedOutCallbackPath = "/signout-callback-idsrv";
                     options.RemoteSignOutPath = "/signout-idsrv";
                 });
