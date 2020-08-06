@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Threading.Tasks;
 using IdentityServer4;
 using IdentityServer4.Models;
@@ -12,12 +11,15 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 using OAuthTest.IDP.Repository;
+using OAuthTest.IDP.Utils;
 
 namespace OAuthTest.IDP
 {
@@ -70,6 +72,7 @@ namespace OAuthTest.IDP
 
             void ConfigureExternalAuthentications()
             {
+                IdentityModelEventSource.ShowPII = true;
                 services.AddAuthentication()
                 .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
                 {
@@ -95,6 +98,50 @@ namespace OAuthTest.IDP
                     options.CallbackPath = "/signin-idsrv";
                     options.SignedOutCallbackPath = "/signout-callback-idsrv";
                     options.RemoteSignOutPath = "/signout-idsrv";
+                })
+                .AddOpenIdConnect("manualidsrv", "IdentityServer Manual", options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.SignOutScheme = IdentityServerConstants.SignoutScheme;
+
+                    options.Authority = "https://demo.identityserver.io/";
+                    options.ClientId = "login";
+                    options.ResponseType = "id_token";
+                    options.SaveTokens = true;
+
+                    options.Configuration = new OpenIdConnectConfiguration
+                    {
+                        Issuer = "https://demo.identityserver.io",
+                        //JwksUri = "https://demo.identityserver.io/.well-known/openid-configuration/jwks",
+                        AuthorizationEndpoint = "https://demo.identityserver.io/connect/authorize",
+                        TokenEndpoint = "https://demo.identityserver.io/connect/token",
+                        UserInfoEndpoint = "https://demo.identityserver.io/connect/userinfo",
+                        EndSessionEndpoint = "https://demo.identityserver.io/connect/endsession",
+                    };
+
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateAudience = true,
+                        ValidAudience = options.ClientId,
+
+                        ValidateIssuer = true,
+                        ValidIssuers = new[] { options.Authority },
+
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKeys = ExternalOidcHelper.GetSigningKeysFromDemoIdentityServer(),
+
+                        RequireExpirationTime = true,
+                        ValidateLifetime = true,
+                        RequireSignedTokens = true,
+                    };
+
+                    options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
+                    options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
+                    options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
+
+                    options.CallbackPath = "/signin-manualidsrv";
+                    options.SignedOutCallbackPath = "/signout-callback-manualidsrv";
+                    options.RemoteSignOutPath = "/signout-manualidsrv";
                 });
             }
 
