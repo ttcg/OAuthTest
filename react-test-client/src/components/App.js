@@ -14,7 +14,6 @@ function App() {
       <header className="App-header">
         React OAuth Test Client
       </header>
-      <p>
         <Router>
           <Switch>
             <Route path="/callback">
@@ -25,7 +24,6 @@ function App() {
             </Route>
           </Switch>
         </Router>
-      </p>
     </div>
   );
 }

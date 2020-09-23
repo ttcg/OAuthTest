@@ -254,8 +254,11 @@ namespace OAuthTest.IDP
                     RequireClientSecret = false,
                     RequireConsent = false,
 
+                    AccessTokenLifetime = 120,
+                    AccessTokenType = AccessTokenType.Reference,
+
                     // where to redirect to after login
-                    RedirectUris = { $"{clientUrl}/callback" },
+                    RedirectUris = { $"{clientUrl}/callback", $"{clientUrl}/silent.html" },
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = { $"{clientUrl}/index.html" },

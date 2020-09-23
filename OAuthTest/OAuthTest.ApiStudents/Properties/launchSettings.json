@@ -17,7 +17,7 @@
       }
     },
     "OAuthTest.ApiStudents": {
-      "commandName": "Project",
+      "commandName": "IISExpress",
       "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
