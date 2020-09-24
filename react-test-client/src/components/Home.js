@@ -19,6 +19,15 @@ export default function Home() {
     };
 
     var mgr = new Oidc.UserManager(config);
+    mgr.events.addAccessTokenExpiring(function(){
+        console.log("token expiring...");
+    });
+    mgr.events.addAccessTokenExpired(function(){
+        console.log("token expired...");
+    });
+    mgr.events.addSilentRenewError(function(){
+        console.log("silent renew error...");
+    });
 
     useEffect(() => {
         mgr.getUser().then(function (user) {
@@ -50,17 +59,18 @@ export default function Home() {
         if (currentUser) {
             // setAccessToken(JSON.parse(sessionStorage.getItem('oidc.user:https://localhost:44378:react-test-client')).access_token);
 
-            mgr.getUser().then(function (user) {
+            //mgr.getUser().then(function (user) {
 
-                setAccessToken(user.access_token)
-
-                console.log(access_token)
+                //setAccessToken(user.access_token)
+                const accessTokenFromStorage = JSON.parse(sessionStorage.getItem('oidc.user:https://localhost:44378:react-test-client')).access_token;
+                setAccessToken(accessTokenFromStorage);
+                console.log(accessTokenFromStorage)
 
                 var url = "https://localhost:44367/api/students/f1e5f27b-8fbc-4baf-b769-f82c25ed551e";
                 fetch(url, {
                     headers: {
                         'Content-Type': 'application/json',
-                        "Authorization": "Bearer " + access_token,
+                        "Authorization": "Bearer " + accessTokenFromStorage,
                     }
                 })
                     .then(response => response.json())
@@ -69,7 +79,7 @@ export default function Home() {
                             setResult(data)
                         }
                     );
-            });
+            //});
         }
         else {
             setResult("User not logged in")
