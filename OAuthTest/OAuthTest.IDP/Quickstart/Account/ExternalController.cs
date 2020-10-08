@@ -168,6 +168,11 @@ namespace IdentityServer4.Quickstart.UI
 
             var user = repository.FindByEmail(userEmail.Value);
 
+            if (user == null)
+            {
+                user = repository.FindBySubjectId(providerUserId);
+            }
+
             if (user != null)
             {
                 providerUserId = user.SubjectId;

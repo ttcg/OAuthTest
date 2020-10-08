@@ -67,6 +67,18 @@ namespace OAuthTest.IDP.Repository
                 Address = "Thiri Street",
                 UserId = "11112222",
                 CompanyId = "33334444"
+            },
+            new User()
+            {
+                SubjectId = "hpXRvyfmJloT9uJnXX-6nqMJa0BWmRvKZ-zbn2hmb0Y",
+                Username = "TTCG Azure",
+                Email = "ttcg@azureTest.com",
+                FirstForename = "TTCG",
+                Surname = "Azure",
+                Country = "MM",
+                Address = "Microsoft Street",
+                UserId = "845632",
+                CompanyId = "23102020"
             }
         }; 
 

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -25,9 +26,12 @@ namespace OAuthTest.IDP
 {
     public class Startup
     {
-        //private string[] supportedCultures = new[] { "en-US", "fr", "es" };
+        public IConfiguration Configuration { get; }
 
-
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }        
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -78,8 +82,8 @@ namespace OAuthTest.IDP
                 {
                     options.SignInScheme = IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme;
 
-                    options.ClientId = "319143812640-qntvt2snefo4hmh43fiuj2j1a7ju5l0c.apps.googleusercontent.com";
-                    options.ClientSecret = "Oj9DaTHFrhqe7xoxK_G1LWeO";
+                    options.ClientId = Configuration["Secret:GoogleClientId"];
+                    options.ClientSecret = Configuration["Secret:Secret:GoogleClientSecret"];
                 })
                 .AddOpenIdConnect("demoidsrv", "IdentityServer", options =>
                 {
@@ -142,7 +146,28 @@ namespace OAuthTest.IDP
                     options.CallbackPath = "/signin-manualidsrv";
                     options.SignedOutCallbackPath = "/signout-callback-manualidsrv";
                     options.RemoteSignOutPath = "/signout-manualidsrv";
-                });
+                })
+                .AddOpenIdConnect("aad", "Azure AD", options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.SignOutScheme = IdentityServerConstants.SignoutScheme;
+
+                    options.Authority = "https://login.microsoftonline.com/common";
+                    options.ClientId = Configuration["Secret:AzureClientId"];                    
+                    options.ResponseType = OpenIdConnectResponseType.IdToken;
+                    options.CallbackPath = "/signin-aad";
+                    options.SignedOutCallbackPath = "/signout-callback-aad";
+                    options.RemoteSignOutPath = "/signout-aad";
+
+                    options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        NameClaimType = "name",
+                        RoleClaimType = "role"
+                    };
+                }); 
             }
 
             void ConfigureIdentityServer()
