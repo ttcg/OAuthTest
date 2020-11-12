@@ -83,12 +83,25 @@ namespace OAuthTest.IDP
             {
                 new ApiResource(Constants.Clients.ApiStudents, "OAuth Test Api Students", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country, "custom_user_id" })
                 {
-                    ApiSecrets = { new Secret("secret".ToSha256()) }
+                    ApiSecrets = { new Secret(Constants.Secrets.SharedSecret.ToSha256()) },
+                    Scopes = { Constants.Clients.ApiStudents }
                 },
-                new ApiResource(Constants.Clients.ApiTeachers, "OAuth Test Api Teachers", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country }),
+                new ApiResource(Constants.Clients.ApiTeachers, "OAuth Test Api Teachers", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country })
+                {
+                    ApiSecrets = { new Secret(Constants.Secrets.SharedSecret.ToSha256()) },
+                    Scopes = { Constants.Clients.ApiTeachers }
+                },
                 new ApiResource(Constants.Clients.ApiCourses, "OAuth Test Api Courses", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country })
             };
         }
+
+        public static IEnumerable<ApiScope> GetApiScopes () =>
+            new List<ApiScope>
+            {
+                new ApiScope(Constants.Clients.ApiStudents, "OAuth Test Api Students", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country, "custom_user_id" }),
+                new ApiScope(Constants.Clients.ApiTeachers, "OAuth Test Api Teachers", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country }),
+                new ApiScope(Constants.Clients.ApiCourses, "OAuth Test Api Courses", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country })
+            };
 
         public static IEnumerable<Client> GetClients()
         {
@@ -110,7 +123,7 @@ namespace OAuthTest.IDP
                 {
                     ClientName = "OAuth Test Students",
                     ClientId = Constants.Clients.Students,
-                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    AllowedGrantTypes = GrantTypes.Code,
                     AccessTokenLifetime = 300,
                     AllowOfflineAccess = true,
                     RequireConsent = false,
@@ -140,7 +153,7 @@ namespace OAuthTest.IDP
                 {
                     ClientName = "OAuth Test Teachers",
                     ClientId = Constants.Clients.Teachers,
-                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    AllowedGrantTypes = GrantTypes.Code,
                     AccessTokenLifetime = 300,
                     AllowOfflineAccess = true,
                     RequireConsent = false,
@@ -213,7 +226,7 @@ namespace OAuthTest.IDP
                 {
                     ClientName = "Test Web Application",
                     ClientId = "testwebapplication",
-                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    AllowedGrantTypes = GrantTypes.Code,
                     AccessTokenLifetime = 300,
                     AllowOfflineAccess = true,
                     RequireConsent = false,

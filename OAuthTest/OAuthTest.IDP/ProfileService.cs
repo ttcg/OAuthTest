@@ -21,7 +21,7 @@ namespace OAuthTest.IDP
             _userRepository = userRepository;
         }
 
-        public async Task GetProfileDataAsync(ProfileDataRequestContext context)
+        public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             var sub = context.Subject.GetSubjectId();
 
@@ -59,15 +59,19 @@ namespace OAuthTest.IDP
                 context.AddRequestedClaims(claims);
                 //context.IssuedClaims = claims;
             }
+
+            return Task.CompletedTask;
         }
 
-        public async Task IsActiveAsync(IsActiveContext context)
+        public Task IsActiveAsync(IsActiveContext context)
         {
             var sub = context.Subject.GetSubjectId();
 
             var user = _userRepository.FindBySubjectId(sub);
 
             context.IsActive = user != null;
+
+            return Task.CompletedTask;
         }
     }
 

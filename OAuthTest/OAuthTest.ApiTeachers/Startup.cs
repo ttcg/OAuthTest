@@ -28,7 +28,17 @@ namespace OAuthTest.ApiTeachers
                 {
                     options.Authority = Constants.Urls.IdentityServerProviderUrl;
                     options.ApiName = Constants.Clients.ApiTeachers;
+                    options.ApiSecret = Constants.Secrets.SharedSecret;
                 });
+
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("ApiScope", policy =>
+            //    {
+            //        policy.RequireAuthenticatedUser();
+            //        policy.RequireClaim("scope", Constants.Clients.ApiTeachers);
+            //    });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

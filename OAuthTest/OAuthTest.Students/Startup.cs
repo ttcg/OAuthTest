@@ -11,10 +11,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -44,7 +43,7 @@ namespace OAuthTest.Students
                 services.AddLocalization(option =>
                 {
                     option.ResourcesPath = "Resources";
-                });                
+                });
 
                 var supportedCultures = new[]
                 {
@@ -64,7 +63,7 @@ namespace OAuthTest.Students
                 ConfigureAuthentication();
 
                 services.AddMvc()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                     .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix,
                     options => options.ResourcesPath = "Resources");
             }
@@ -98,7 +97,7 @@ namespace OAuthTest.Students
                     options.SignInScheme = "Cookies";
                     options.Authority = Constants.Urls.IdentityServerProviderUrl;
                     options.ClientId = Constants.Clients.Students;
-                    options.ResponseType = "code id_token";
+                    options.ResponseType = "code";
 
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
@@ -162,7 +161,7 @@ namespace OAuthTest.Students
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -181,18 +180,19 @@ namespace OAuthTest.Students
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseRouting();
             app.UseCookiePolicy();
 
-            app.UseMvc(routes =>
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "AccessDenied",
-                    template: "AccessDenied",
+                    pattern: "AccessDenied",
                     defaults: new { controller = "Home", action = "AccessDenied" });
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapDefaultControllerRoute();                
             });
         }
     }
