@@ -113,7 +113,8 @@ namespace OAuthTest.IDP
                     CreatePostmanClient(),
                     CreateTestApiClient(),
                     CreateTestMvcClient(),
-                    CreateTestReactClient()
+                    CreateTestReactClient(),
+                    CreateResourceOwnerClient()
                 };
             }
 
@@ -185,6 +186,7 @@ namespace OAuthTest.IDP
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = { "https://www.getpostman.com/oauth2/callback", "https://oauth.pstmn.io/v1/callback" },
 
+                    RequirePkce = false,
                     AccessTokenType = AccessTokenType.Reference,
                     AllowOfflineAccess = true,
                     RequireConsent = false,
@@ -285,6 +287,25 @@ namespace OAuthTest.IDP
                         Constants.Clients.ApiStudents
                     }
 
+                };
+            }
+
+            Client CreateResourceOwnerClient()
+            {
+                return new Client
+                {
+                    ClientName = "Resource Owner Client",
+                    ClientId = "resourceOwnerClient",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+
+                    AccessTokenType = AccessTokenType.Reference,
+                    AllowOfflineAccess = true,
+                    RequireConsent = false,
+                    AllowedScopes = PopulateScopes(),
+                    ClientSecrets =
+                        {
+                            new Secret(Constants.Secrets.SharedSecret.Sha256())
+                        }
                 };
             }
 
