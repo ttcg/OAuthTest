@@ -1,0 +1,84 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:44388"
+  },
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/students",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44367
+        }
+      ],
+      "UpstreamPathTemplate": "/api/students",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "student-profile"
+    },
+    {
+      "DownstreamPathTemplate": "/api/teachers",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44331
+        }
+      ],
+      "UpstreamPathTemplate": "/api/teachers",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "teacher-profile"
+    },
+    // secured routes
+    {
+      "DownstreamPathTemplate": "/api/students/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44367
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdsrvKey",
+        "AllowedScopes": []
+      },
+      "UpstreamPathTemplate": "/api/students/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "student-secured"
+    },
+    {
+      "DownstreamPathTemplate": "/api/teachers/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44331
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdsrvKey",
+        "AllowedScopes": []
+      },
+      "UpstreamPathTemplate": "/api/teachers/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "teacher-secured"
+    }
+  ],
+  "Aggregates": [
+    {
+      "RouteKeys": [
+        "student-secured",
+        "teacher-secured"
+      ],
+      "UpstreamPathTemplate": "/api/aggregates/{everything}"
+    },
+    {
+      "RouteKeys": [
+        "student-profile",
+        "teacher-profile"
+      ],
+      "UpstreamPathTemplate": "/api/aggregates"
+    }
+  ]
+}

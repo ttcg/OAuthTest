@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.Teachers", "OAuth
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.ApiTeachers", "OAuthTest.ApiTeachers\OAuthTest.ApiTeachers.csproj", "{7D19CD69-68BB-47A3-8DFD-8E93ACF20843}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthTest.ApiCourses", "OAuthTest.ApiCourses\OAuthTest.ApiCourses.csproj", "{D504C9D7-1804-4A6B-90CA-2529EF7B1A14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.ApiCourses", "OAuthTest.ApiCourses\OAuthTest.ApiCourses.csproj", "{D504C9D7-1804-4A6B-90CA-2529EF7B1A14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthTest.ApiGateway", "OAuthTest.ApiGateway\OAuthTest.ApiGateway.csproj", "{007C3BF0-2F33-4C19-A0FB-99738A509F83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{D504C9D7-1804-4A6B-90CA-2529EF7B1A14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D504C9D7-1804-4A6B-90CA-2529EF7B1A14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D504C9D7-1804-4A6B-90CA-2529EF7B1A14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{007C3BF0-2F33-4C19-A0FB-99738A509F83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{007C3BF0-2F33-4C19-A0FB-99738A509F83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{007C3BF0-2F33-4C19-A0FB-99738A509F83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{007C3BF0-2F33-4C19-A0FB-99738A509F83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

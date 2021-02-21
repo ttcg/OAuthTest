@@ -91,6 +91,11 @@ namespace OAuthTest.IDP
                     ApiSecrets = { new Secret(Constants.Secrets.SharedSecret.ToSha256()) },
                     Scopes = { Constants.Clients.ApiTeachers }
                 },
+                new ApiResource(Constants.Clients.ApiAll, "OAuth Test Api All", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country, "custom_user_id" })
+                {
+                    ApiSecrets = { new Secret(Constants.Secrets.SharedSecret.ToSha256()) },
+                    Scopes = { Constants.Clients.ApiStudents, Constants.Clients.Teachers }
+                },
                 new ApiResource(Constants.Clients.ApiCourses, "OAuth Test Api Courses", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country })
             };
         }
@@ -322,6 +327,7 @@ namespace OAuthTest.IDP
                             Constants.Clients.ApiStudents,
                             Constants.Clients.ApiTeachers,
                             Constants.Clients.ApiCourses,
+                            Constants.Clients.ApiAll,
                             "custom_ids"
                 };
         }

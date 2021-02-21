@@ -24,6 +24,7 @@ namespace OAuthTest.Constants
         public const string ApiStudents = "oauthtestapistudents";
         public const string ApiTeachers = "oauthtestapiteachers";
         public const string ApiCourses = "oauthtestapicourses";
+        public const string ApiAll = "oauthtestapiall";
     }
 
     public class CustomClaimTypes
