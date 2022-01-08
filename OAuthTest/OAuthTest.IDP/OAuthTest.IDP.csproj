@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <UserSecretsId>cd6e9752-e2ee-4bcc-a86a-ae9247c9f790</UserSecretsId>
+    <UserSecretsId>2f7f2e9c-f5e6-4dc2-a740-8abae1f663ce</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IdentityServer4" Version="4.1.1" />
+    <PackageReference Include="IdentityServer4" Version="4.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.10" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
   </ItemGroup>
@@ -19,5 +18,4 @@
   <ItemGroup>
     <ProjectReference Include="..\OAuthTest.Constants\OAuthTest.Constants.csproj" />
   </ItemGroup>
-
 </Project>

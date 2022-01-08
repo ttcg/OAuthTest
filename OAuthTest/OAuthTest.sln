@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.IDP", "OAuthTest.IDP\OAuthTest.IDP.csproj", "{38134D21-7D2F-4A09-A3A9-067860DE7623}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.ApiStudents", "OAuthTest.ApiStudents\OAuthTest.ApiStudents.csproj", "{ECAFBB26-CB35-4850-AAC8-39D7A38D5455}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.Students", "OAuthTest.Students\OAuthTest.Students.csproj", "{F10593A9-A6F5-476C-B9D3-E77B3D09B326}"
@@ -17,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.ApiTeachers", "OA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.ApiCourses", "OAuthTest.ApiCourses\OAuthTest.ApiCourses.csproj", "{D504C9D7-1804-4A6B-90CA-2529EF7B1A14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthTest.ApiGateway", "OAuthTest.ApiGateway\OAuthTest.ApiGateway.csproj", "{007C3BF0-2F33-4C19-A0FB-99738A509F83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthTest.ApiGateway", "OAuthTest.ApiGateway\OAuthTest.ApiGateway.csproj", "{007C3BF0-2F33-4C19-A0FB-99738A509F83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthTest.IDP", "OAuthTest.IDP\OAuthTest.IDP.csproj", "{C72049AA-4726-4E99-8933-7FB5B9FEB541}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{38134D21-7D2F-4A09-A3A9-067860DE7623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{38134D21-7D2F-4A09-A3A9-067860DE7623}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{38134D21-7D2F-4A09-A3A9-067860DE7623}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{38134D21-7D2F-4A09-A3A9-067860DE7623}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ECAFBB26-CB35-4850-AAC8-39D7A38D5455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ECAFBB26-CB35-4850-AAC8-39D7A38D5455}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECAFBB26-CB35-4850-AAC8-39D7A38D5455}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,6 +53,10 @@ Global
 		{007C3BF0-2F33-4C19-A0FB-99738A509F83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{007C3BF0-2F33-4C19-A0FB-99738A509F83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{007C3BF0-2F33-4C19-A0FB-99738A509F83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C72049AA-4726-4E99-8933-7FB5B9FEB541}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C72049AA-4726-4E99-8933-7FB5B9FEB541}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C72049AA-4726-4E99-8933-7FB5B9FEB541}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C72049AA-4726-4E99-8933-7FB5B9FEB541}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
