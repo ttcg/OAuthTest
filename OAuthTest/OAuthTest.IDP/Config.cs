@@ -100,7 +100,7 @@ namespace OAuthTest.IDP
             };
         }
 
-        public static IEnumerable<ApiScope> GetApiScopes () =>
+        public static IEnumerable<ApiScope> GetApiScopes() =>
             new List<ApiScope>
             {
                 new ApiScope(Constants.Clients.ApiStudents, "OAuth Test Api Students", new List<string> { JwtClaimTypes.Role, Constants.CustomClaimTypes.Country, "custom_user_id" }),
@@ -117,7 +117,7 @@ namespace OAuthTest.IDP
                     CreateTeachersClient(),
                     CreatePostmanClient(),
                     CreateTestApiClient(),
-                    CreateTestMvcClient(),
+                    CreateEnrolmentsClient(),
                     CreateTestReactClient(),
                     CreateResourceOwnerClient()
                 };
@@ -133,7 +133,7 @@ namespace OAuthTest.IDP
                     AccessTokenLifetime = 300,
                     AllowOfflineAccess = true,
                     RequireConsent = false,
-                    
+
                     UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
                     AccessTokenType = AccessTokenType.Reference,
                     RedirectUris = new List<string>
@@ -226,39 +226,31 @@ namespace OAuthTest.IDP
                 };
             }
 
-            Client CreateTestMvcClient()
+            Client CreateEnrolmentsClient()
             {
-                var clientUrl = "http://localhost:64177";
+                var clientUrl = Constants.Urls.EnrolmentsUrl;
                 return new Client
                 {
-                    ClientName = "Test Web Application",
-                    ClientId = "testwebapplication",
+                    ClientName = "Enrolment Web Application",
+                    ClientId = Constants.Clients.Enrolments,
                     AllowedGrantTypes = GrantTypes.Code,
                     AccessTokenLifetime = 300,
+                    AccessTokenType = AccessTokenType.Reference,
                     AllowOfflineAccess = true,
                     RequireConsent = false,
                     UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims
                     RedirectUris = new List<string>
                     {
-                        $"{clientUrl}/signin-oidc"
+                        $"{clientUrl}"
                     },
-                    PostLogoutRedirectUris = new List<string>
-                    {
-                        $"{clientUrl}/signout-callback-oidc"
-                    },
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        Constants.Clients.ApiStudents,
-                        "custom_ids"
-                    },
+                    FrontChannelLogoutUri = $"{clientUrl}/Home/SignOut",
+                    AllowedScopes = PopulateScopes(),
                     ClientSecrets =
-                    {
-                        new Secret("t1webapplication".Sha256())
-                    },
-                    AlwaysIncludeUserClaimsInIdToken = true,
-                    AlwaysSendClientClaims = true
+                        {
+                            new Secret(Constants.Secrets.SharedSecret.Sha256())
+                        },
+                    AllowPlainTextPkce = false,
+                    RequirePkce = true
                 };
             }
 

@@ -10,6 +10,7 @@ namespace OAuthTest.Constants
         public const string ApiCoursesUrl = "https://localhost:44361";
         public const string StudentsUrl = "https://localhost:44392";
         public const string TeachersUrl = "https://localhost:44344";
+        public const string EnrolmentsUrl = "https://localhost:44380";
     }
 
     public class Secrets
@@ -21,6 +22,7 @@ namespace OAuthTest.Constants
     {
         public const string Students = "oauthteststudents";
         public const string Teachers = "oauthtestteachers";
+        public const string Enrolments = "oauthtestenrolment";
         public const string ApiStudents = "oauthtestapistudents";
         public const string ApiTeachers = "oauthtestapiteachers";
         public const string ApiCourses = "oauthtestapicourses";
