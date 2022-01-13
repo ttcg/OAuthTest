@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Owin.Security.Cookies;
+using OAuthTest.Enrolments.Models;
 
 namespace OAuthTest.Enrolments.Controllers
 {
@@ -19,12 +22,26 @@ namespace OAuthTest.Enrolments.Controllers
         [Authorize]
         public async Task<ActionResult> Diagnostic()
         {
-            ViewBag.Message = "Your application description page.";
             var result = await HttpContext.GetOwinContext().Authentication.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationType);
-            var accessToken = result.Properties.Dictionary[OpenIdConnectParameterNames.AccessToken];
-            var refreshToken = result.Properties.Dictionary[OpenIdConnectParameterNames.RefreshToken];
 
-            return View();
+            var viewModel = new DiagnosticViewModel
+            {
+                RefreshToken = result.Properties.Dictionary[OpenIdConnectParameterNames.RefreshToken],
+                AccessToken = result.Properties.Dictionary[OpenIdConnectParameterNames.AccessToken],
+                JwtClaims = new List<Claim>(),
+                UserClaims = result.Identity.Claims.ToList()
+            };
+
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var token = handler.ReadJwtToken(viewModel.AccessToken);
+
+                viewModel.JwtClaims = token.Claims.ToList();
+            }
+            catch { }
+
+            return View(viewModel);
         }
 
 

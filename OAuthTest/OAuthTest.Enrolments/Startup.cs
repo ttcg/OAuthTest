@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
 using System;
+using System.Collections.Generic;
 using IdentityModel;
 
 [assembly: OwinStartup(typeof(OAuthTest.Enrolments.Startup))]
@@ -35,59 +36,80 @@ namespace OAuthTest.Enrolments
                     Authority = Constants.Urls.IdentityServerProviderUrl,
                     RedirectUri = Constants.Urls.EnrolmentsUrl,
                     PostLogoutRedirectUri = Constants.Urls.EnrolmentsUrl,
-                    Scope = $"{OpenIdConnectScope.OpenIdProfile} {OpenIdConnectScope.OfflineAccess}",
+                    Scope = PopulateScopes(),
                     SignInAsAuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
                     ResponseType = OpenIdConnectResponseType.Code,
-                    UsePkce = true,                    
+                   
                     UseTokenLifetime = false,
                     RedeemCode = true,
                     SaveTokens = true,
-                    
+
+
                     TokenValidationParameters = new TokenValidationParameters()
                     {
-                        ValidateIssuer = true // This is a simplification
+                        ValidateIssuer = true 
                     },
 
+
                     // OpenIdConnectAuthenticationNotifications configures OWIN to send notification of failed authentications to OnAuthenticationFailed method
-                    Notifications = new OpenIdConnectAuthenticationNotifications
-                    {
-                        AuthenticationFailed = OnAuthenticationFailed,
-                        RedirectToIdentityProvider = n =>
-                        {
-                            if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.Authentication)
-                            {
-                                // set PKCE parameters
-                                var codeVerifier = CryptoRandom.CreateUniqueId(32);
+                    //Notifications = new OpenIdConnectAuthenticationNotifications
+                    //{
+                    //    AuthenticationFailed = OnAuthenticationFailed,
+                    //    RedirectToIdentityProvider = n =>
+                    //    {
+                    //        if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.Authentication)
+                    //        {
+                    //            // set PKCE parameters
+                    //            var codeVerifier = CryptoRandom.CreateUniqueId(32);
 
-                                string codeChallenge;
-                                using (var sha256 = SHA256.Create())
-                                {
-                                    var challengeBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(codeVerifier));
-                                    codeChallenge = Base64Url.Encode(challengeBytes);
-                                }
+                    //            string codeChallenge;
+                    //            using (var sha256 = SHA256.Create())
+                    //            {
+                    //                var challengeBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(codeVerifier));
+                    //                codeChallenge = Base64Url.Encode(challengeBytes);
+                    //            }
 
-                                n.ProtocolMessage.SetParameter("code_challenge", codeChallenge);
-                                n.ProtocolMessage.SetParameter("code_challenge_method", "S256");
+                    //            n.ProtocolMessage.SetParameter("code_challenge", codeChallenge);
+                    //            n.ProtocolMessage.SetParameter("code_challenge_method", "S256");
 
-                                // remember code_verifier (adapted from OWIN nonce cookie)
-                                RememberCodeVerifier(n, codeVerifier);
-                            }
+                    //            // remember code_verifier (adapted from OWIN nonce cookie)
+                    //            RememberCodeVerifier(n, codeVerifier);
+                    //        }
 
-                            return Task.CompletedTask;
-                        },
-                        AuthorizationCodeReceived = n =>
-                        {
-                            // get code_verifier
-                            var codeVerifier = RetrieveCodeVerifier(n);
+                    //        return Task.CompletedTask;
+                    //    },
+                    //    AuthorizationCodeReceived = n =>
+                    //    {
+                    //        // get code_verifier
+                    //        var codeVerifier = RetrieveCodeVerifier(n);
 
-                            // attach code_verifier
-                            n.TokenEndpointRequest.SetParameter("code_verifier", codeVerifier);
+                    //        // attach code_verifier
+                    //        n.TokenEndpointRequest.SetParameter("code_verifier", codeVerifier);
 
-                            return Task.CompletedTask;
-                        }
-                    }
+                    //        return Task.CompletedTask;
+                    //    }
+                    //}
                 }
             );
+
+            string PopulateScopes()
+            {
+                var scopes = new List<string>
+                {
+                    OpenIdConnectScope.OpenIdProfile,
+                    OpenIdConnectScope.OfflineAccess,
+                    OpenIdConnectScope.Email,
+                    Constants.Clients.ApiStudents,
+                    Constants.Clients.ApiTeachers,
+                    Constants.Clients.ApiCourses,
+                    "address",
+                    "roles",
+                    "country",
+                    "custom_ids"
+                };
+
+                return string.Join(" ", scopes.ToArray());
+            }
         }
 
         /// <summary>

@@ -235,7 +235,6 @@ namespace OAuthTest.IDP
                     ClientId = Constants.Clients.Enrolments,
                     AllowedGrantTypes = GrantTypes.Code,
                     AccessTokenLifetime = 300,
-                    AccessTokenType = AccessTokenType.Reference,
                     AllowOfflineAccess = true,
                     RequireConsent = false,
                     UpdateAccessTokenClaimsOnRefresh = true, // to reflect the latest changes in User Claims

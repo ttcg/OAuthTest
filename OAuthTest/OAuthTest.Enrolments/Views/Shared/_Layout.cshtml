@@ -21,7 +21,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Diagnostic", "Diagnostic", "Home")</li>
+                    <li>@Html.ActionLink("Diagnostic", "Diagnostic", "Home", new { id = 12345, language = "fr" }, null)</li>
                     <li><a href="@OAuthTest.Constants.Urls.IdentityServerProviderUrl">IdentityServer</a></li>
                 </ul>
             </div>
