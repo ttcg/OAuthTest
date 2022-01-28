@@ -65,6 +65,7 @@ namespace OAuthTest.IDP
                     options.FallBackToParentUICultures = true;
                 });
 
+                services.AddAuthorization();
                 services.AddSingleton<UserRepository>();
 
                 ConfigureExternalAuthentications();
@@ -202,6 +203,7 @@ namespace OAuthTest.IDP
 
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
